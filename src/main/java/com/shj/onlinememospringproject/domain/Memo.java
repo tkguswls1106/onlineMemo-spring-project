@@ -41,5 +41,5 @@ public class Memo implements Serializable {
 
     // 참고로 이건 db에 안나타남.
     @OneToMany(mappedBy = "memo")
-    private Set<UserMemo> userMemo = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+    private Set<UserAndMemo> userAndMemos = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
 }

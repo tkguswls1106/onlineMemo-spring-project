@@ -3,9 +3,6 @@ package com.shj.onlinememospringproject.domain;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 
@@ -16,20 +13,20 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 
-@Table(name = "usermemo")
+@Table(name = "user_and_memo")
 @Entity
-public class UserMemo implements Serializable {
+public class UserAndMemo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usermemo_id")
+    @Column(name = "user_memo_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fk_memo_id", nullable = false)
+    @JoinColumn(name = "memo_id")
     private Memo memo;
 }

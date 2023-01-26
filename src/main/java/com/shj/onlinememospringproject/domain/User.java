@@ -29,12 +29,12 @@ public class User implements Serializable {
     private String loginId;
 
     //@NonNull
-    @Column(name = "password_first", nullable = false)
-    private String pwFirst;
+    @Column(name = "first_password", nullable = false)
+    private String firstPw;
 
     //@NonNull
-    @Column(name = "password_second", nullable = false)
-    private String pwSecond;
+    @Column(name = "second_password", nullable = false)
+    private String secondPw;
 
     //@NonNull
     @Column(name = "username", nullable = false)
@@ -42,9 +42,9 @@ public class User implements Serializable {
 
     // 참고로 이건 db에 안나타남.
     @OneToMany(mappedBy = "user")
-    private Set<UserMemo> userMemo = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+    private Set<UserAndMemo> userAndMemos = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
 
     // 참고로 이건 db에 안나타남.
     @OneToMany(mappedBy = "user")
-    private Set<Friendship> friendship = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+    private Set<Friendship> friendships = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
 }

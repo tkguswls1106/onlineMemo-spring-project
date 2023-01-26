@@ -18,18 +18,17 @@ import java.util.Set;
 
 @Table(name = "friendship")
 @Entity
-@IdClass(Friendship.class)
 public class Friendship implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "pk_fk_called_userid")  // 기준임. 친구요청받은 유저.
+    @JoinColumn(name = "user_id")  // 기준임. 친구요청 받은 유저.
     private User user;
 
-    // 나중에 반드시 같은 pk_fk_called_userid 에 대하여 같은 pk_calling_userid 가 안나오도록 조건문으로 중복안되게 막도록하자!
+    // 나중에 반드시 같은 user_id 에 대하여 같은 sender_user_id 가 안나오도록 조건문으로 중복안되게 막도록하자!
     //@NonNull
-    @Column(name = "pk_calling_userid", nullable = false)  // 친구요청한 유저.
-    private Long callingUserid;
+    @Column(name = "sender_user_id")  // 친구요청 보낸 유저.
+    private Long senderUserId;
 
     //@NonNull
     @Column(name = "is_friend", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1, nullable = false)
