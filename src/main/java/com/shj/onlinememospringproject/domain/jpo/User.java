@@ -18,16 +18,16 @@ public class User implements Serializable {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "login_id", unique = true, nullable = false)
+    @Column(name = "login_id", unique = true)
     private String loginId;
 
-    @Column(name = "first_password", nullable = false)
+    @Column(name = "first_password")
     private String firstPw;
 
-    @Column(name = "second_password", nullable = false)
+    @Column(name = "second_password")
     private String secondPw;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
     // 참고로 이건 db에 안나타남.
@@ -44,6 +44,15 @@ public class User implements Serializable {
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;
+        this.username = username;
+    }
+
+
+    // 수정(업데이트) 기능
+    public void updatePw(String firstPw) {  // 1차 패스워드 변경 기능
+        this.firstPw = firstPw;
+    }
+    public void updateName(String username) {  // 사용자이름 변경 기능
         this.username = username;
     }
 }

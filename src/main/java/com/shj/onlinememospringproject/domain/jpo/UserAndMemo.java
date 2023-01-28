@@ -23,4 +23,11 @@ public class UserAndMemo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "memo_id")
     private Memo memo;
+
+
+    @Builder
+    public UserAndMemo(User user, Memo memo) {
+        this.user = user;
+        this.memo = memo;
+    }
 }

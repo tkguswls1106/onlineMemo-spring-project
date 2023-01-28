@@ -20,9 +20,28 @@ public class Friendship implements Serializable {
     @Column(name = "sender_user_id")  // 친구요청 보낸 유저.
     private Long senderUserId;
 
-    @Column(name = "is_friend", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1, nullable = false)
-    private boolean isFriend;
+    @Column(name = "is_friend", columnDefinition = "TINYINT(1)", length = 1)
+    private Integer isFriend;
 
-    @Column(name = "is_wait", columnDefinition = "TINYINT(1) DEFAULT 1", length = 1, nullable = false)
-    private boolean isWait;
+    @Column(name = "is_wait", columnDefinition = "TINYINT(1)", length = 1)
+    private Integer isWait;
+
+
+    @Builder
+    public Friendship(Long senderUserId, Integer isFriend, Integer isWait) {
+        this.senderUserId = senderUserId;
+        this.isFriend = isFriend;
+        this.isWait = isWait;
+    }
+
+
+    // 수정(업데이트) 기능
+    public void updateYes() {  // 친구요청 수락시 업데이트 기능
+        this.isFriend = 1;
+        this.isWait = 0;
+    }
+    public void updateNo() {  // 친구요청 거절시 업데이트 기능
+        this.isFriend = 0;
+        this.isWait = 0;
+    }
 }
