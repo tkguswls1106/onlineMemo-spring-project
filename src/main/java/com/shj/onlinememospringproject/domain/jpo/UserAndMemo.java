@@ -1,17 +1,11 @@
-package com.shj.onlinememospringproject.domain;
+package com.shj.onlinememospringproject.domain.jpo;
 
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
-
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
 
 @Table(name = "user_and_memo")
 @Entity
