@@ -49,10 +49,10 @@ public class User implements Serializable {
 
 
     // 수정(업데이트) 기능
-    public void updatePw(String firstPw) {  // 1차 패스워드 변경 기능
+    public void updateFirstPw(String firstPw) {  // 1차 패스워드 변경 기능
         this.firstPw = firstPw;
     }
-    public void updateName(String username) {  // 사용자이름 변경 기능
+    public void updateUsername(String username) {  // 사용자이름 변경 기능
         this.username = username;
     }
 }
