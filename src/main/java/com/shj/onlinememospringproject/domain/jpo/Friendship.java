@@ -28,7 +28,8 @@ public class Friendship implements Serializable {
 
 
     @Builder
-    public Friendship(Long senderUserId, Integer isFriend, Integer isWait) {
+    public Friendship(User user, Long senderUserId, Integer isFriend, Integer isWait) {
+        this.user = user;
         this.senderUserId = senderUserId;
         this.isFriend = isFriend;
         this.isWait = isWait;

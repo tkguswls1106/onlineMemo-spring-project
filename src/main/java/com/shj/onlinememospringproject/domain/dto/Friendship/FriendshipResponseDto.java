@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FriendshipResponseDto {
+public class FriendshipResponseDto {  // 요청받아 가져오는 DTO. 예를들어 CRUD의 R. method로는 get.
 
     private User user;
 

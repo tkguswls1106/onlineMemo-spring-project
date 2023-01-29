@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class MemoResponseDto {
+public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 CRUD의 R. method로는 get.
 
     private Long id;
     private String title;

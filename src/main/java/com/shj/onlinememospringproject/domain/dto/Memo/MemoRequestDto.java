@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemoRequestDto {
+public class MemoRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. method로는 post.
 
     private String title;
     private String content;

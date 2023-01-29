@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserRequestDto {
+public class UserRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. method로는 post.
 
     private String loginId;
     private String firstPw;
