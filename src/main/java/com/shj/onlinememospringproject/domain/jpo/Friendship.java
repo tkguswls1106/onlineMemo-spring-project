@@ -12,8 +12,12 @@ import java.io.Serializable;
 public class Friendship implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "friendship_id")
+    private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")  // 기준임. 친구요청 받은 유저.
+    @JoinColumn(name = "user_id", nullable = false)  // 친구요청 받은 유저.
     private User user;
 
     // 나중에 반드시 같은 user_id 에 대하여 같은 sender_user_id 가 안나오도록 조건문으로 중복안되게 막도록하자!

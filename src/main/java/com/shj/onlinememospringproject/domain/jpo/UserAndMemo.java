@@ -30,4 +30,8 @@ public class UserAndMemo implements Serializable {
         this.user = user;
         this.memo = memo;
     }
+
+
+    // 수정(업데이트) 기능
+    // 이는 딱히 사용처가 없어 만들지 않았음.
 }

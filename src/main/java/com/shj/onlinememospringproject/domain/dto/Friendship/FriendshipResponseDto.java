@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FriendshipResponseDto {  // 요청받아 가져오는 DTO. 예를들어 CRUD의 R. method로는 get.
 
+    private Long id;
+
     private User user;
 
     private Long senderUserId;
@@ -17,6 +19,7 @@ public class FriendshipResponseDto {  // 요청받아 가져오는 DTO. 예를�
 
     // repository를 통해 조회한 entity를 dto로 변환 용도
     public FriendshipResponseDto(Friendship entity) {
+        this.id = entity.getId();
         this.user = User.builder()
                 .loginId(entity.getUser().getLoginId())
                 .firstPw(entity.getUser().getFirstPw())
