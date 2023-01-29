@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemoServiceLogic implements MemoService {
 
-    private MemoStore memoStore;
+    private final MemoStore memoStore;
     @Autowired
     public MemoServiceLogic(MemoStore memoStore) {
         this.memoStore = memoStore;

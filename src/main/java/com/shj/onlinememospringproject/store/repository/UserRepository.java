@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepository implements UserStore {
 
-    private UserJpaStore userJpaStore;
+    private final UserJpaStore userJpaStore;
     public UserRepository(UserJpaStore userJpaStore) {
         this.userJpaStore = userJpaStore;
     }

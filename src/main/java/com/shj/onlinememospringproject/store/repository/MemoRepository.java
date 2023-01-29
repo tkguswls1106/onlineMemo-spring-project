@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MemoRepository implements MemoStore {
 
-    private MemoJpaStore memoJpaStore;
+    private final MemoJpaStore memoJpaStore;
     public MemoRepository(MemoJpaStore memoJpaStore){
         this.memoJpaStore = memoJpaStore;
     }

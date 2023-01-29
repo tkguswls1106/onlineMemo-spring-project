@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/memos")
 public class MemoController {
 
-    private MemoService memoService;
+    private final MemoService memoService;
     @Autowired
     public MemoController(MemoService memoService) {
         this.memoService = memoService;

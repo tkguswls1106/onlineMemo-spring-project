@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceLogic implements UserService {
 
-    private UserStore userStore;
+    private final UserStore userStore;
     @Autowired
     public UserServiceLogic(UserStore userStore) {
         this.userStore = userStore;
