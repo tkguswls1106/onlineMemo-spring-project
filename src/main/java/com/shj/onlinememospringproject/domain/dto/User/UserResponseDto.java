@@ -1,8 +1,11 @@
 package com.shj.onlinememospringproject.domain.dto.User;
 
+import com.shj.onlinememospringproject.domain.jpo.Friendship;
 import com.shj.onlinememospringproject.domain.jpo.User;
+import com.shj.onlinememospringproject.domain.jpo.UserAndMemo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +16,9 @@ public class UserResponseDto {
     private String firstPw;
     private String secondPw;
     private String username;
+
+    private Set<UserAndMemo> userAndMemos;
+    private Set<Friendship> friendships;
 
     // repository를 통해 조회한 entity를 dto로 변환 용도
     public UserResponseDto(User entity) {
