@@ -4,8 +4,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -36,7 +36,7 @@ public class Memo implements Serializable {
     // 참고로 이건 db에 안나타남.
     @Builder.Default
     @OneToMany(mappedBy = "memo")
-    private List<UserAndMemo> userAndMemos = new ArrayList<>();
+    private Set<UserAndMemo> userAndMemos = new HashSet<>();
 
 
     @Builder
