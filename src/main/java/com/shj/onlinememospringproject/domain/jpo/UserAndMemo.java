@@ -25,7 +25,7 @@ public class UserAndMemo implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "memo_id")
-    @NotFound(action = NotFoundAction.IGNORE)
+    // @NotFound(action = NotFoundAction.IGNORE)
     private Memo memo;
 
 

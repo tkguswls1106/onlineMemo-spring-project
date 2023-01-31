@@ -13,7 +13,7 @@ public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 C
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime modifiedDate;
+    private String modifiedDate;
     private Integer isStar;
 
     // repository를 통해 조회한 entity를 dto로 변환 용도

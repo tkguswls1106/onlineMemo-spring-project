@@ -1,5 +1,6 @@
 package com.shj.onlinememospringproject.domain.jpo;
 
+import com.shj.onlinememospringproject.domain.DefaultFriendshipEntity;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 
 @Table(name = "friendship")
 @Entity
-public class Friendship implements Serializable {
+public class Friendship extends DefaultFriendshipEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +24,6 @@ public class Friendship implements Serializable {
     // 나중에 반드시 같은 user_id 에 대하여 같은 sender_user_id 가 안나오도록 조건문으로 중복안되게 막도록하자!
     @Column(name = "sender_user_id")  // 친구요청 보낸 유저.
     private Long senderUserId;
-
-    @Builder.Default
-    @Column(name = "is_friend", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isFriend = 0;
-
-    @Builder.Default
-    @Column(name = "is_wait", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isWait = 1;
 
 
     @Builder

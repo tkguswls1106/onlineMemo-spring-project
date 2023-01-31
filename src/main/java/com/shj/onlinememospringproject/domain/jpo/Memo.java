@@ -1,18 +1,17 @@
 package com.shj.onlinememospringproject.domain.jpo;
 
+import com.shj.onlinememospringproject.domain.DefaultMemoEntity;
 import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
 
 @Table(name = "memo")
 @Entity
-public class Memo implements Serializable {
+public class Memo extends DefaultMemoEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +23,6 @@ public class Memo implements Serializable {
 
     @Column(name = "content")
     private String content;
-
-    @Builder.Default
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate = LocalDateTime.now();
-
-    @Builder.Default
-    @Column(name = "is_star", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isStar = 0;
 
 //    // 참고로 이건 db에 안나타남.
 //    @Builder.Default
@@ -50,7 +41,6 @@ public class Memo implements Serializable {
     public void updateMemo(String title, String content) {  // 메모 수정 기능.
         this.title = title;
         this.content = content;
-        this.modifiedDate = LocalDateTime.now();
     }
     public void updateStar(Integer isStar) {  // 메모 즐겨찾기 여부 변경 기능.
         this.isStar = isStar;
