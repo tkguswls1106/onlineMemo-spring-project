@@ -27,7 +27,6 @@ public class UserAndMemoResponseDto {  // 요청받아 가져오는 DTO. 예를�
         this.memo = Memo.builder()
                 .title(entity.getMemo().getTitle())
                 .content(entity.getMemo().getContent())
-                .isStar(entity.getMemo().getIsStar())
                 .build();
     }
 }
