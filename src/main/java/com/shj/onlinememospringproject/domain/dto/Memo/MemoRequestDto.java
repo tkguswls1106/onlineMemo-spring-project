@@ -16,7 +16,6 @@ public class MemoRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. meth
         return Memo.builder()
                 .title(title)
                 .content(content)
-                .isStar(0)
                 .build();
     }
 }

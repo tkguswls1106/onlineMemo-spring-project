@@ -5,7 +5,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -26,25 +28,24 @@ public class Memo implements Serializable {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate = LocalDateTime.now();
-
+    @Builder.Default
     @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+    private LocalDateTime modifiedDate = LocalDateTime.now();
 
+    @Builder.Default
     @Column(name = "is_star", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isStar;
+    private Integer isStar = 0;
 
     // 참고로 이건 db에 안나타남.
+    @Builder.Default
     @OneToMany(mappedBy = "memo")
-    private Set<UserAndMemo> userAndMemos = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+    private List<UserAndMemo> userAndMemos = new ArrayList<>();
 
 
     @Builder
-    public Memo(String title, String content, Integer isStar) {
+    public Memo(String title, String content) {
         this.title = title;
         this.content = content;
-        this.isStar = isStar;
     }
 
 
@@ -55,11 +56,6 @@ public class Memo implements Serializable {
         this.modifiedDate = LocalDateTime.now();
     }
     public void updateStar(Integer isStar) {  // 메모 즐겨찾기 여부 변경 기능.
-        if(this.isStar == 0) {
-            this.isStar = 1;
-        }
-        else if (this.isStar == 1) {
-            this.isStar = 0;
-        }
+        this.isStar = isStar;
     }
 }

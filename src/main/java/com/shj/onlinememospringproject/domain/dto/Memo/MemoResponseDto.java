@@ -14,7 +14,6 @@ public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 C
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Integer isStar;
 
@@ -25,7 +24,6 @@ public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 C
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.isStar = entity.getIsStar();
     }
