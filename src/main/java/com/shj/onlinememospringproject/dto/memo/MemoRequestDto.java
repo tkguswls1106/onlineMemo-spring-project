@@ -1,6 +1,6 @@
-package com.shj.onlinememospringproject.domain.dto.Memo;
+package com.shj.onlinememospringproject.dto.memo;
 
-import com.shj.onlinememospringproject.domain.jpo.Memo;
+import com.shj.onlinememospringproject.domain.memo.Memo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

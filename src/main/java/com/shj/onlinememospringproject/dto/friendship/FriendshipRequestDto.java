@@ -1,7 +1,7 @@
-package com.shj.onlinememospringproject.domain.dto.Friendship;
+package com.shj.onlinememospringproject.dto.friendship;
 
-import com.shj.onlinememospringproject.domain.jpo.Friendship;
-import com.shj.onlinememospringproject.domain.jpo.User;
+import com.shj.onlinememospringproject.domain.friendship.Friendship;
+import com.shj.onlinememospringproject.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

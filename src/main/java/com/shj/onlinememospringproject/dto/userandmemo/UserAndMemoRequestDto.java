@@ -1,8 +1,8 @@
-package com.shj.onlinememospringproject.domain.dto.UserAndMemo;
+package com.shj.onlinememospringproject.dto.userandmemo;
 
-import com.shj.onlinememospringproject.domain.jpo.Memo;
-import com.shj.onlinememospringproject.domain.jpo.User;
-import com.shj.onlinememospringproject.domain.jpo.UserAndMemo;
+import com.shj.onlinememospringproject.domain.memo.Memo;
+import com.shj.onlinememospringproject.domain.user.User;
+import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

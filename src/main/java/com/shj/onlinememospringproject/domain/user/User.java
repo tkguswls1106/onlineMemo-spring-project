@@ -1,10 +1,8 @@
-package com.shj.onlinememospringproject.domain.jpo;
+package com.shj.onlinememospringproject.domain.user;
 
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -33,12 +31,12 @@ public class User implements Serializable {
 //    // 참고로 이건 db에 안나타남.
 //    @Builder.Default
 //    @OneToMany(mappedBy = "user")
-//    private Set<UserAndMemo> userAndMemos = new HashSet<>();
+//    private Set<userandmemo> userAndMemos = new HashSet<>();
 
 //    // 참고로 이건 db에 안나타남.
 //    @Builder.Default
 //    @OneToMany(mappedBy = "user")
-//    private Set<Friendship> friendships = new HashSet<>();
+//    private Set<friendship> friendships = new HashSet<>();
 
 
     @Builder

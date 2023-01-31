@@ -1,6 +1,7 @@
-package com.shj.onlinememospringproject.domain.jpo;
+package com.shj.onlinememospringproject.domain.friendship;
 
 import com.shj.onlinememospringproject.domain.DefaultFriendshipEntity;
+import com.shj.onlinememospringproject.domain.user.User;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,8 +1,8 @@
-package com.shj.onlinememospringproject.domain.jpo;
+package com.shj.onlinememospringproject.domain.userandmemo;
 
+import com.shj.onlinememospringproject.domain.memo.Memo;
+import com.shj.onlinememospringproject.domain.user.User;
 import lombok.*;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;

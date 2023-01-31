@@ -1,8 +1,8 @@
-package com.shj.onlinememospringproject.domain.dto.UserAndMemo;
+package com.shj.onlinememospringproject.dto.userandmemo;
 
-import com.shj.onlinememospringproject.domain.jpo.Memo;
-import com.shj.onlinememospringproject.domain.jpo.User;
-import com.shj.onlinememospringproject.domain.jpo.UserAndMemo;
+import com.shj.onlinememospringproject.domain.memo.Memo;
+import com.shj.onlinememospringproject.domain.user.User;
+import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class UserAndMemoResponseDto {  // 요청받아 가져오는 DTO. 예를�
     private User user;
     private Memo memo;
 
-    // DB에서 repository를 통해 조회하거나 가져온 entity(도메인)를 dto로 변환 용도
+    // DB에서 repository를 통해 조회하거나 가져온 entityandstore(도메인)를 dto로 변환 용도
     public UserAndMemoResponseDto(UserAndMemo entity) {
         this.id = entity.getId();
         this.user = User.builder()

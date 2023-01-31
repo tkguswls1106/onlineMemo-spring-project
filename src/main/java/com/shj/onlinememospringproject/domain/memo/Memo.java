@@ -1,4 +1,4 @@
-package com.shj.onlinememospringproject.domain.jpo;
+package com.shj.onlinememospringproject.domain.memo;
 
 import com.shj.onlinememospringproject.domain.DefaultMemoEntity;
 import lombok.*;
@@ -27,7 +27,7 @@ public class Memo extends DefaultMemoEntity implements Serializable {
 //    // 참고로 이건 db에 안나타남.
 //    @Builder.Default
 //    @OneToMany(mappedBy = "memo")
-//    private Set<UserAndMemo> userAndMemos = new HashSet<>();
+//    private Set<userandmemo> userAndMemos = new HashSet<>();
 
 
     @Builder
