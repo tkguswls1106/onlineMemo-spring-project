@@ -17,26 +17,26 @@ public class Friendship implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)  // 친구요청 받은 유저.
+    @JoinColumn(name = "user_id")  // 친구요청 받은 유저.
     private User user;
 
     // 나중에 반드시 같은 user_id 에 대하여 같은 sender_user_id 가 안나오도록 조건문으로 중복안되게 막도록하자!
     @Column(name = "sender_user_id")  // 친구요청 보낸 유저.
     private Long senderUserId;
 
+    @Builder.Default
     @Column(name = "is_friend", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isFriend;
+    private Integer isFriend = 0;
 
+    @Builder.Default
     @Column(name = "is_wait", columnDefinition = "TINYINT(1)", length = 1)
-    private Integer isWait;
+    private Integer isWait = 1;
 
 
     @Builder
-    public Friendship(User user, Long senderUserId, Integer isFriend, Integer isWait) {
+    public Friendship(User user, Long senderUserId) {
         this.user = user;
         this.senderUserId = senderUserId;
-        this.isFriend = isFriend;
-        this.isWait = isWait;
     }
 
 

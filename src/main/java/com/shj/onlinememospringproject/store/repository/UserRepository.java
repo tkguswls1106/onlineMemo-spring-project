@@ -1,6 +1,6 @@
 package com.shj.onlinememospringproject.store.repository;
 
-import com.shj.onlinememospringproject.domain.dto.User.UserRequestDto;
+import com.shj.onlinememospringproject.domain.dto.User.UserJoinRequestDto;
 import com.shj.onlinememospringproject.domain.dto.User.UserResponseDto;
 import com.shj.onlinememospringproject.domain.jpo.User;
 import com.shj.onlinememospringproject.store.jpastore.UserJpaStore;
@@ -19,8 +19,8 @@ public class UserRepository implements UserStore {
 
 
     @Override
-    public Long create(UserRequestDto userRequestDto) {  // 사용자 생성하고, 해당 사용자id 반환.
-        User entity = userJpaStore.save(userRequestDto.toEntity());
+    public Long create(UserJoinRequestDto userJoinRequestDto) {  // 사용자 생성하고, 해당 사용자id 반환.
+        User entity = userJpaStore.save(userJoinRequestDto.toEntity());
         return entity.getId();
 
         // 중복 사용자 검사는 서비스 레이어에서 진행한다.
@@ -42,8 +42,8 @@ public class UserRepository implements UserStore {
     }
 
     @Override
-    public void updatePw(UserRequestDto userRequestDto, String firstPw) {  // 해당 사용자의 1차비밀번호 수정.
-        User entity = userRequestDto.toEntity();
+    public void updatePw(UserJoinRequestDto userJoinRequestDto, String firstPw) {  // 해당 사용자의 1차비밀번호 수정.
+        User entity = userJoinRequestDto.toEntity();
         entity.updateFirstPw(firstPw);
         userJpaStore.save(entity);
 
@@ -52,8 +52,8 @@ public class UserRepository implements UserStore {
     }
 
     @Override
-    public void updateName(UserRequestDto userRequestDto, String username) {  // 해당 사용자의 이름 수정.
-        User entity = userRequestDto.toEntity();
+    public void updateName(UserJoinRequestDto userJoinRequestDto, String username) {  // 해당 사용자의 이름 수정.
+        User entity = userJoinRequestDto.toEntity();
         entity.updateUsername(username);
         userJpaStore.save(entity);
 

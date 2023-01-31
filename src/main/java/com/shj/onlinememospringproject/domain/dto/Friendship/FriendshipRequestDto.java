@@ -19,8 +19,6 @@ public class FriendshipRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C
         return Friendship.builder()
                 .user(user)
                 .senderUserId(senderUserId)
-                .isFriend(0)
-                .isWait(1)
                 .build();
     }
 }

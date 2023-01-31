@@ -33,10 +33,10 @@ public class Memo implements Serializable {
     @Column(name = "is_star", columnDefinition = "TINYINT(1)", length = 1)
     private Integer isStar = 0;
 
-    // 참고로 이건 db에 안나타남.
-    @Builder.Default
-    @OneToMany(mappedBy = "memo")
-    private Set<UserAndMemo> userAndMemos = new HashSet<>();
+//    // 참고로 이건 db에 안나타남.
+//    @Builder.Default
+//    @OneToMany(mappedBy = "memo")
+//    private Set<UserAndMemo> userAndMemos = new HashSet<>();
 
 
     @Builder

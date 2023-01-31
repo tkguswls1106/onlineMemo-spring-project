@@ -30,17 +30,27 @@ public class User implements Serializable {
     @Column(name = "username")
     private String username;
 
-    // 참고로 이건 db에 안나타남.
-    @OneToMany(mappedBy = "user")
-    private Set<UserAndMemo> userAndMemos = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+//    // 참고로 이건 db에 안나타남.
+//    @Builder.Default
+//    @OneToMany(mappedBy = "user")
+//    private Set<UserAndMemo> userAndMemos = new HashSet<>();
 
-    // 참고로 이건 db에 안나타남.
-    @OneToMany(mappedBy = "user")
-    private Set<Friendship> friendships = new HashSet<>();  // 나중에 안되면 Set말고 List로 변경하자!
+//    // 참고로 이건 db에 안나타남.
+//    @Builder.Default
+//    @OneToMany(mappedBy = "user")
+//    private Set<Friendship> friendships = new HashSet<>();
 
 
     @Builder
+    public User(Long id, String loginId, String username) {
+        this.id = id;
+        this.loginId = loginId;
+        this.username = username;
+    }
+
+    @Builder(builderMethodName = "UserJoinBuilder")
     public User(String loginId, String firstPw, String secondPw, String username) {
+        // 이 빌더는 사용자 회원가입때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;

@@ -21,9 +21,8 @@ public class FriendshipResponseDto {  // 요청받아 가져오는 DTO. 예를�
     public FriendshipResponseDto(Friendship entity) {
         this.id = entity.getId();
         this.user = User.builder()
+                .id(entity.getUser().getId())
                 .loginId(entity.getUser().getLoginId())
-                .firstPw(entity.getUser().getFirstPw())
-                .secondPw(entity.getUser().getSecondPw())
                 .username(entity.getUser().getUsername())
                 .build();
         this.senderUserId = entity.getSenderUserId();

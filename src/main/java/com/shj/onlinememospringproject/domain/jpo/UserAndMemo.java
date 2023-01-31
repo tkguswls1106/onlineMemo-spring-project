@@ -1,6 +1,9 @@
 package com.shj.onlinememospringproject.domain.jpo;
 
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -17,11 +20,12 @@ public class UserAndMemo implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "memo_id")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Memo memo;
 
 
