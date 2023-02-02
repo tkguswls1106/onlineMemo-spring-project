@@ -17,7 +17,7 @@ public class FriendshipResponseDto {  // 요청받아 가져오는 DTO. 예를�
     private Integer isFriend;
     private Integer isWait;
 
-    // DB에서 repository를 통해 조회하거나 가져온 entityandstore(도메인)를 dto로 변환 용도
+    // DB에서 repository를 통해 조회하거나 가져온 entity(도메인)를 dto로 변환 용도
     public FriendshipResponseDto(Friendship entity) {
         this.id = entity.getId();
         this.user = User.builder()

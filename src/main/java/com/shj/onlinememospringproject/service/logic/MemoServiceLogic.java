@@ -1,6 +1,14 @@
 package com.shj.onlinememospringproject.service.logic;
 
+import com.shj.onlinememospringproject.domain.memo.Memo;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
+import com.shj.onlinememospringproject.domain.user.User;
+import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
+import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
+import com.shj.onlinememospringproject.dto.memo.MemoRequestDto;
+import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
+import com.shj.onlinememospringproject.dto.user.UserResponseDto;
+import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,5 +19,33 @@ import org.springframework.stereotype.Service;
 public class MemoServiceLogic implements MemoService {
 
     private final MemoJpaRepository memoJpaRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final UserAndMemoJpaRepository userAndMemoJpaRepository;
+
+
+    @Override
+    public Long saveMemo(Long userId, MemoRequestDto memoRequestDto) { // 신규 메모 생성하고 memoId 반환 기능.
+        // 사용자 없이 메모 단독으로는 생성이 불가능하므로 파라미터 2개 필요.
+        // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
+
+        User userEntity = userJpaRepository.findById(userId).orElseThrow(
+                ()->new IllegalArgumentException("해당 userId의 사용자는 존재하지 않습니다!! => userId: " + userId));  // userId에 해당되는 User 객체 찾아오기
+
+        Memo memoEntity = memoJpaRepository.save(memoRequestDto.toEntity());  // 메모 저장하고
+
+        userAndMemoJpaRepository.save(new UserAndMemoRequestDto().toEntity(userEntity, memoEntity));  // UserAndMemo 테이블에도 저장.
+
+        return memoEntity.getId();
+    }
+
+    @Override
+    public MemoResponseDto findById(Long memoId) {  // memoId로 검색한 메모 1개 반환 기능.
+        // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
+
+        Memo entity = memoJpaRepository.findById(memoId).orElseThrow(
+                ()->new IllegalArgumentException("해당 memoId의 메모는 존재하지 않습니다!! => memoId: " + memoId));
+
+        return new MemoResponseDto(entity);
+    }
 
 }
