@@ -6,7 +6,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Getter
 @MappedSuperclass
@@ -34,12 +36,13 @@ public abstract class DefaultMemoEntity {
 
     @PrePersist  // 해당 엔티티를 저장하기 이전에 실행된다.
     public void onPrePersist(){
-        this.modifiedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko")));
         this.isStar = this.isStar == null ? 0 : this.isStar;
     }
 
     @PreUpdate  // 해당 엔티티를 업데이트 하기 이전에 실행된다.
+    // 참고로 이걸 엔티티 컬럼중에서 isStar이 업데이트 될때의 경우는 제외하고 modifiedDate을 @PreUpdate을 적용시켜야만 한다.
     public void onPreUpdate(){
-        this.modifiedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko")));
     }
 }
