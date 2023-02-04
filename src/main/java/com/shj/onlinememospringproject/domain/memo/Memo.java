@@ -42,7 +42,9 @@ public class Memo extends DefaultMemoEntity implements Serializable {
         this.title = title;
         this.content = content;
     }
-    public void updateStar(Integer isStar) {  // 메모 즐겨찾기 여부 변경 기능.
-        this.isStar = isStar;
-    }
+
+    // 이는 따로 MemoJpaRepository 인터페이스에 @Query로 updateStar메소드를 따로 작성해주었다. 그 이유는 DefaultMemoEntity 클래스에 주석으로 첨부하였음.
+//    public void updateStar(Integer isStar) {  // 메모 즐겨찾기 여부 변경 기능.
+//        this.isStar = isStar;
+//    }
 }

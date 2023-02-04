@@ -41,7 +41,8 @@ public abstract class DefaultMemoEntity {
     }
 
     @PreUpdate  // 해당 엔티티를 업데이트 하기 이전에 실행된다.
-    // 참고로 이걸 엔티티 컬럼중에서 isStar이 업데이트 될때의 경우는 제외하고 modifiedDate을 @PreUpdate을 적용시켜야만 한다.
+    // 참고로 엔티티 컬럼중에서 isStar이 업데이트 될때의 경우는 제외하고 modifiedDate을 @PreUpdate을 적용시켜야만 한다.
+    // 그렇기에 @EnableJpaAuditing인 JPA Entity LifeCycle 에서 벗어난 isStar의 update기능을 구현하기 위하여 따로 MemoJpaRepository 인터페이스에 @Query로 updateStar메소드를 따로 작성해주었다.
     public void onPreUpdate(){
         this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko")));
     }
