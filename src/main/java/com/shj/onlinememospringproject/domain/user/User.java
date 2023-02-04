@@ -28,16 +28,6 @@ public class User implements Serializable {
     @Column(name = "username")
     private String username;
 
-//    // 참고로 이건 db에 안나타남.
-//    @Builder.Default
-//    @OneToMany(mappedBy = "user")
-//    private Set<userandmemo> userAndMemos = new HashSet<>();
-
-//    // 참고로 이건 db에 안나타남.
-//    @Builder.Default
-//    @OneToMany(mappedBy = "user")
-//    private Set<friendship> friendships = new HashSet<>();
-
 
     @Builder
     public User(Long id, String loginId, String username) {
@@ -46,13 +36,21 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    @Builder(builderMethodName = "UserJoinBuilder")
+    @Builder(builderClassName = "UserJoinBuilder", builderMethodName = "UserJoinBuilder")
     public User(String loginId, String firstPw, String secondPw, String username) {
         // 이 빌더는 사용자 회원가입때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;
         this.username = username;
+    }
+
+    @Builder(builderClassName = "UserUpdateBuilder", builderMethodName = "UserUpdateBuilder")
+    public User(String loginId, String firstPw, String secondPw) {
+        // 이 빌더는 사용자 1차비밀번호수정때만 사용할 용도
+        this.loginId = loginId;
+        this.firstPw = firstPw;
+        this.secondPw = secondPw;
     }
 
 

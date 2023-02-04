@@ -33,14 +33,14 @@ public class Friendship extends DefaultFriendshipEntity implements Serializable 
         this.senderUserId = senderUserId;
     }
 
-
-    // 수정(업데이트) 기능
-    public void updateYes() {  // 친구요청 수락시 업데이트 기능
-        this.isFriend = 1;
-        this.isWait = 0;
-    }
-    public void updateNo() {  // 친구요청 거절시 업데이트 기능
-        this.isFriend = 0;
-        this.isWait = 0;
-    }
+    // 이건 리액트에서 관리해서 값을 스프링으로 전달하도록 하자. put method로 변경하기.
+//    // 수정(업데이트) 기능
+//    public void updateYes() {  // 친구요청 수락시 업데이트 기능
+//        this.isFriend = 1;
+//        this.isWait = 0;
+//    }
+//    public void updateNo() {  // 친구요청 거절시 업데이트 기능
+//        this.isFriend = 0;
+//        this.isWait = 0;
+//    }
 }

@@ -12,9 +12,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// 사실 여기에 @Transactional 선언해도된다.
+// 만약 롤백을 하지않고싶은 메소드가 따로 있다면, 헤당 테스트메소드에 각각 @Rollback(false)을 적어주면된다.
 @SpringBootTest
 public class MemoServiceTest {
 
@@ -34,6 +37,7 @@ public class MemoServiceTest {
 
     @Test
     @DisplayName("메모 저장_Test")
+    // @Transactional
     void memoSave_Test() {
         String title = "메모제목입력";
         String content = "메모내용입력";
@@ -43,15 +47,16 @@ public class MemoServiceTest {
                 .content(content)
                 .build();
 
-        memoServiceLogic.saveMemo(Long.valueOf(3), memoRequestDto);  // userId가 3인 사용자의 메모 생성
+        memoServiceLogic.saveMemo(Long.valueOf(1), memoRequestDto);  // userId가 1인 사용자의 메모 생성
     }
 
     @Test
     @DisplayName("메모 1개 검색_Test")
+    @Transactional(readOnly = true)
     void findMemo_Test() {  // memoId로 검색한 메모 1개 반환 기능.
-        MemoResponseDto memoResponseDto = memoServiceLogic.findById(Long.valueOf(6));  // memoId가 6인 메모 검색
-        assertThat(memoResponseDto.getId()).isEqualTo(Long.valueOf(6));  // memoId가 6이 맞는가?
-        assertThat(memoResponseDto.getTitle()).isEqualTo("가나다");  // title가 '가나다'가 맞는가?
-        assertThat(memoResponseDto.getContent()).isEqualTo("사현진");  // content가 '사현진'이 맞는가?
+        MemoResponseDto memoResponseDto = memoServiceLogic.findById(Long.valueOf(1));  // memoId가 1인 메모 검색
+        assertThat(memoResponseDto.getId()).isEqualTo(Long.valueOf(1));  // memoId가 1이 맞는가?
+        assertThat(memoResponseDto.getTitle()).isEqualTo("메모제목입력");  // title이 '메모제목입력'가 맞는가?
+        assertThat(memoResponseDto.getContent()).isEqualTo("메모내용입력");  // content가 '메모내용입력'이 맞는가?
     }
 }

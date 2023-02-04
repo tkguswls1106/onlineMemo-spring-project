@@ -17,6 +17,7 @@ import com.shj.onlinememospringproject.service.UserAndMemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     private final MemoJpaRepository memoJpaRepository;
 
 
+    @Transactional(readOnly = true)
     @Override
     public List<MemoResponseDto> findMemosByUserId(Long userId) {  // userId와 일치하는 사용자의 메모들 리스트 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
@@ -49,6 +51,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         return memos.stream().map(MemoResponseDto::new).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserResponseDto> findUsersByMemoId(Long memoId) {  // memoId와 일치하는 메모의 사용자들 리스트 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
@@ -66,35 +69,24 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         return users.stream().map(UserResponseDto::new).collect(Collectors.toList());
     }
 
-//    // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.
-//    public List<UserResponseDto> inviteUserToMemo(Long memoId, UserRequestDto userRequestDto) {  // memoId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
-//        // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
-//        // 초대한 사용자를 포함하여 사용자들의 리스트를 메모 우측에 표기하기위해 List<UserResponseDto> 형식으로 반환받음.
-//
-//        Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
-//                ()->new IllegalArgumentException("해당 memoId의 메모는 존재하지 않습니다!! => memoId: " + memoId));  // memoId에 해당되는 Memo 객체 찾아오기
-//
-//        User userEntity = userRequestDto.toEntity();  // 참고로 사용자를 저장하지는 않는다. 그저 요청받은 사용자정보를 entity 객체로 변환만 시켜줄뿐이다.
-//
-//        userAndMemoJpaRepository.save(new UserAndMemoRequestDto().toEntity(userEntity, memoEntity));  // UserAndMemo 테이블에 저장.
-//
-//        return findUsersByMemoId(memoId);
-//    }
-
     // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.
+    @Transactional
     @Override
     public List<UserResponseDto> inviteUserToMemo(Long userId, Long memoId) {  // memoId와 userId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
         // 초대한 사용자를 포함하여 사용자들의 리스트를 메모 우측에 표기하기위해 List<UserResponseDto> 형식으로 반환받음.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new IllegalArgumentException("해당 userId의 사용자는 존재하지 않습니다!! => userId: " + userId));  // userId에 해당되는 User 객체 찾아오기
+        UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
+        User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new IllegalArgumentException("해당 memoId의 메모는 존재하지 않습니다!! => memoId: " + memoId));  // memoId에 해당되는 Memo 객체 찾아오기
+        // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
-        userAndMemoJpaRepository.save(new UserAndMemoRequestDto().toEntity(userEntity, memoEntity));  // UserAndMemo 테이블에 저장.
+        UserAndMemoRequestDto userAndMemoRequestDto = new UserAndMemoRequestDto(userSecondEntity, memoEntity);
+        userAndMemoJpaRepository.save(userAndMemoRequestDto.toEntity());  // UserAndMemo 테이블에도 저장.
 
         return findUsersByMemoId(memoId);
     }
-
 }

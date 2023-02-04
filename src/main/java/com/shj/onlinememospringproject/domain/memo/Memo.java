@@ -24,11 +24,6 @@ public class Memo extends DefaultMemoEntity implements Serializable {
     @Column(name = "content")
     private String content;
 
-//    // 참고로 이건 db에 안나타남.
-//    @Builder.Default
-//    @OneToMany(mappedBy = "memo")
-//    private Set<userandmemo> userAndMemos = new HashSet<>();
-
 
     @Builder
     public Memo(String title, String content) {

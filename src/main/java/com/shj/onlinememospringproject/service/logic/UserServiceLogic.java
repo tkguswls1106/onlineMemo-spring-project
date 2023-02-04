@@ -14,6 +14,8 @@ import com.shj.onlinememospringproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -23,6 +25,7 @@ public class UserServiceLogic implements UserService {
     private final UserJpaRepository userJpaRepository;
 
 
+    @Transactional
     @Override
     public Long save(UserJoinRequestDto userJoinRequestDto) {  // 신규 사용자 생성하고 userId 반환 기능.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
@@ -31,6 +34,7 @@ public class UserServiceLogic implements UserService {
         return entity.getId();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserResponseDto findById(Long userId) {  // userId로 검색한 사용자 1명 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
