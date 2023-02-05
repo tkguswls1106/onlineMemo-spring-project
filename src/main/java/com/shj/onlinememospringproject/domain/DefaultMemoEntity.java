@@ -34,6 +34,13 @@ public abstract class DefaultMemoEntity {
     protected Integer isStar;
 
 
+    public LocalDateTime getDateTimeModifiedDate() {  // 날짜 정렬에 사용할 string형식의 날짜를 localDateTime형식으로 변환하는 메소드이다.
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyy. M. d. a h:mm");
+        LocalDateTime dateTimeModifiedDate = LocalDateTime.parse(this.modifiedDate, formatter);
+        return dateTimeModifiedDate;
+    }
+
+
     @PrePersist  // 해당 엔티티를 저장하기 이전에 실행된다.
     public void onPrePersist(){
         this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko")));

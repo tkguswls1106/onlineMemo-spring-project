@@ -38,7 +38,7 @@ public class MemoServiceTest {
     @Test
     @DisplayName("메모 저장_Test")
     // @Transactional
-    void memoSave_Test() {
+    void memoSave_Test() {  // 신규 메모 생성하고 memoId 반환 기능.
         String title = "메모제목입력";
         String content = "메모내용입력";
 

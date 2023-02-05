@@ -38,7 +38,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("사용자 회원가입_Test")
     // @Transactional  // 테스트 코드에 @Transactional 사용하면 save 성공한뒤에 다시 롤백된다.
-    void userSave_Test() {
+    void userSave_Test() {  // 신규 사용자 생성하고 userId 반환 기능.
         String firstPw = "1차비번입력함";
         String loginId = "로그인아이디입력함";
         String secondPw = "2차비번입력함";

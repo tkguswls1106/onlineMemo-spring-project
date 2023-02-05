@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,11 +36,12 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MemoResponseDto> findMemosByUserId(Long userId) {  // userId와 일치하는 사용자의 메모들 리스트 반환 기능.
+    public List<MemoResponseDto> findMemosByUserId(Long userId) {  // userId와 일치하는 사용자의 메모들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
+//        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+//        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
+        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<Memo> memos = new ArrayList<>();
         for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 userId와 일치하는 user객체가 존재한다면 그 memo객체를 memos리스트에 넣어줌.
@@ -48,16 +50,20 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
             }
         }
 
-        return memos.stream().map(MemoResponseDto::new).collect(Collectors.toList());
+        return memos.stream().map(MemoResponseDto::new)
+                .sorted(Comparator.comparing(MemoResponseDto::getId).reversed()  // 메모 id 내림차순 정렬 후
+                        .thenComparing(MemoResponseDto::getDateTimeModifiedDate).reversed())  // 메모 수정날짜 내림차순 정렬
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserResponseDto> findUsersByMemoId(Long memoId) {  // memoId와 일치하는 메모의 사용자들 리스트 반환 기능.
+    public List<UserResponseDto> findUsersByMemoId(Long memoId) {  // memoId와 일치하는 메모의 사용자들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
+//        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+//        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
+        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<User> users = new ArrayList<>();
         for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 userId와 일치하는 user객체가 존재한다면 그 memo객체를 memos리스트에 넣어줌.
@@ -66,7 +72,10 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
             }
         }
 
-        return users.stream().map(UserResponseDto::new).collect(Collectors.toList());
+        return users.stream().map(UserResponseDto::new)
+                .sorted(Comparator.comparing(UserResponseDto::getId).reversed()  // 사용자 id 내림차순 정렬 후
+                        .thenComparing(UserResponseDto::getUsername))  // 사용자 이름 오름차순 정렬
+                .collect(Collectors.toList());  // 사용자 이름 오름차순 정렬하여 반환.
     }
 
     // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.
