@@ -10,6 +10,7 @@ import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
+import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class UserServiceLogic implements UserService {
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
         User entity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new IllegalArgumentException("해당 userId의 사용자는 존재하지 않습니다!! => userId: " + userId));
+                ()->new NoSuchUserException());
         return new UserResponseDto(entity);
     }
 

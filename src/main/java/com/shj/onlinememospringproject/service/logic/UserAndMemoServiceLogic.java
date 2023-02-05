@@ -13,6 +13,8 @@ import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoResponseDto;
+import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
+import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.UserAndMemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -85,12 +87,12 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         // 초대한 사용자를 포함하여 사용자들의 리스트를 메모 우측에 표기하기위해 List<UserResponseDto> 형식으로 반환받음.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new IllegalArgumentException("해당 userId의 사용자는 존재하지 않습니다!! => userId: " + userId));  // userId에 해당되는 User 객체 찾아오기
+                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
         User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new IllegalArgumentException("해당 memoId의 메모는 존재하지 않습니다!! => memoId: " + memoId));  // memoId에 해당되는 Memo 객체 찾아오기
+                ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
         // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
         UserAndMemoRequestDto userAndMemoRequestDto = new UserAndMemoRequestDto(userSecondEntity, memoEntity);
