@@ -10,6 +10,7 @@ import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
+import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,12 @@ public class UserServiceLogic implements UserService {
     @Override
     public Long save(UserJoinRequestDto userJoinRequestDto) {  // 신규 사용자 생성하고 userId 반환 기능.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
+
+        String newLoginId = userJoinRequestDto.getLoginId();
+        userJpaRepository.findByLoginId(newLoginId)
+                .ifPresent(user -> {  // 해당 로그인아이디의 사용자가 이미 존재한다면,
+                    throw new LoginIdDuplicateException();  // 회원가입 로그인아이디 중복 예외처리.
+                });
 
         User entity = userJpaRepository.save(userJoinRequestDto.toEntity());
         return entity.getId();
