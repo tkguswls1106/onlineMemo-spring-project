@@ -9,6 +9,7 @@ import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
+import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
@@ -50,6 +51,26 @@ public class UserServiceLogic implements UserService {
         User entity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
         return new UserResponseDto(entity);
+    }
+
+    @Transactional
+    @Override
+    public void updateName(Long userId, UserUpdateNameRequestDto userUpdateNameRequestDto) {  // 해당 userId 사용자의 이름 수정 기능.
+
+        User entity = userJpaRepository.findById(userId).orElseThrow(
+                ()->new NoSuchUserException());
+
+        entity.updateUsername(userUpdateNameRequestDto.getUsername());
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(Long userId) {  // 해당 userId의 사용자 삭제 기능.
+
+        User entity = userJpaRepository.findById(userId).orElseThrow(
+                ()->new NoSuchUserException());
+
+        userJpaRepository.delete(entity);
     }
 
 }

@@ -45,12 +45,18 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    @Builder(builderClassName = "UserUpdateBuilder", builderMethodName = "UserUpdateBuilder")
+    @Builder(builderClassName = "UserUpdatePwBuilder", builderMethodName = "UserUpdatePwBuilder")
     public User(String loginId, String firstPw, String secondPw) {
-        // 이 빌더는 사용자 1차비밀번호수정때만 사용할 용도
+        // 이 빌더는 사용자 1차비밀번호 수정때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;
+    }
+
+    @Builder(builderClassName = "UserUpdateNameBuilder", builderMethodName = "UserUpdateNameBuilder")
+    public User(String username) {
+        // 이 빌더는 사용자 이름 수정때만 사용할 용도
+        this.username = username;
     }
 
 

@@ -1,4 +1,4 @@
-package com.shj.onlinememospringproject.response.item;
+package com.shj.onlinememospringproject.response.responseitem;
 
 public class MessageItem {
     public static final String LOGIN_SUCCESS = "로그인 성공";

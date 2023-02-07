@@ -2,6 +2,7 @@ package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
+import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.UserService;
@@ -16,16 +17,29 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping  // /users
+    @PostMapping
     public ResponseEntity joinUser(@RequestBody UserJoinRequestDto userJoinRequestDto) {  // 회원가입
         userService.save(userJoinRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.CREATED_USER);
     }
 
-    @GetMapping("/{userId}")  // /users/{userId}
+    @GetMapping("/{userId}")
     public ResponseEntity findUserById(@PathVariable Long userId) {  // 회원정보 조회
         UserResponseDto userResponseDto = userService.findById(userId);
         return ResponseData.toResponseEntity(ResponseCode.READ_USER, userResponseDto);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity updateName(@PathVariable Long userId, @RequestBody UserUpdateNameRequestDto userUpdateNameRequestDto) {  // 회원이름 수정
+        userService.updateName(userId, userUpdateNameRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.UPDATE_USER);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUser(@PathVariable Long userId) {  // 회원 탈퇴
+        userService.deleteUser(userId);
+        return ResponseData.toResponseEntity(ResponseCode.DELETE_USER);
+        // !!! 나중에 이거 회원 탈퇴 성공시, 로그인 화면으로 리다이렉트 시키도록 변경시킬것. !!!
     }
 
 }
