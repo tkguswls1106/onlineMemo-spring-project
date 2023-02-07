@@ -9,6 +9,6 @@ public class NoSuchMemoException extends RuntimeException  {
     private ResponseCode responseCode;
 
     public NoSuchMemoException() {
-        this.responseCode = ResponseCode.NOT_FOUND_USER;
+        this.responseCode = ResponseCode.NOT_FOUND_MEMO;
     }
 }

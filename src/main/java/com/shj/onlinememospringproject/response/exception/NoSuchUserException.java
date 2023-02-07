@@ -9,6 +9,6 @@ public class NoSuchUserException extends RuntimeException  {
     private ResponseCode responseCode;
 
     public NoSuchUserException() {
-        this.responseCode = ResponseCode.NOT_FOUND_MEMO;
+        this.responseCode = ResponseCode.NOT_FOUND_USER;
     }
 }
