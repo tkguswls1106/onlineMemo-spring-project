@@ -16,14 +16,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity joinUser(@RequestBody UserJoinRequestDto userJoinRequestDto) {
+    @PostMapping  // /users
+    public ResponseEntity joinUser(@RequestBody UserJoinRequestDto userJoinRequestDto) {  // 회원가입
         userService.save(userJoinRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.CREATED_USER);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity findUserById(@PathVariable Long userId) {
+    @GetMapping("/{userId}")  // /users/{userId}
+    public ResponseEntity findUserById(@PathVariable Long userId) {  // 회원정보 조회
         UserResponseDto userResponseDto = userService.findById(userId);
         return ResponseData.toResponseEntity(ResponseCode.READ_USER, userResponseDto);
     }

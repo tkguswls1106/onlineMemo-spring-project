@@ -5,6 +5,7 @@ import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
 import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
+import com.shj.onlinememospringproject.response.exception.UserAndMemoDuplicateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity handleNoSuchMemoException(NoSuchMemoException ex) {
         log.error("handleNoSuchMemoException", ex);
         return ResponseData.toResponseEntity(ResponseCode.NOT_FOUND_MEMO);
+    }
+
+    @ExceptionHandler(UserAndMemoDuplicateException.class)
+    public ResponseEntity handleUserAndMemoDuplicateException(UserAndMemoDuplicateException ex) {
+        log.error("handleUserAndMemoDuplicateException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.DUPLICATE_USERANDMEMO);
     }
 
 }
