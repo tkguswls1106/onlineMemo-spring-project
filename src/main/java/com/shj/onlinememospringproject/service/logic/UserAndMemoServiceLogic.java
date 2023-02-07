@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor  // 이걸로 private final 되어있는걸 자동으로 생성자 만들어줘서 @Autowired와 this 없이 의존관계 DI 주입시켜줌.
 public class UserAndMemoServiceLogic implements UserAndMemoService {
 
-    private final UserAndMemoJpaRepository userAndMemoJpaRepository;
     private final UserJpaRepository userJpaRepository;
     private final MemoJpaRepository memoJpaRepository;
+    private final UserAndMemoJpaRepository userAndMemoJpaRepository;
 
 
     @Transactional(readOnly = true)

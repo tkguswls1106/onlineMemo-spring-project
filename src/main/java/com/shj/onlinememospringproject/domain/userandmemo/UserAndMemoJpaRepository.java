@@ -14,4 +14,5 @@ import java.util.List;
 public interface UserAndMemoJpaRepository extends JpaRepository<UserAndMemo, Long> {
 
     boolean existsByUserAndMemo(User user, Memo memo);  // 동일한 사용자와 동일한 메모 정보를 가진 컬럼이 이미 DB에 존재하는지 반환.
+    void deleteAllByUser(User user);  // 해당 사용자에 대한 메모와의 관계 모두 삭제.
 }

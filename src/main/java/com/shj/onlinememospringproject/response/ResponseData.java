@@ -10,7 +10,10 @@ import org.springframework.util.MultiValueMap;
 @Builder
 @ToString
 public class ResponseData<T> {
+
+    private final int status;
     private final ResponseCode code;
+    private final String message;
     private T data;
 
     // response data가 없을때
@@ -18,7 +21,9 @@ public class ResponseData<T> {
         return ResponseEntity
                 .status(responseCode.getHttpStatus())
                 .body(ResponseData.builder()
+                        .status(responseCode.getHttpStatus())
                         .code(responseCode)
+                        .message(responseCode.getMessage())
                         .build()
                 );
     }
@@ -28,7 +33,9 @@ public class ResponseData<T> {
         return ResponseEntity
                 .status(responseCode.getHttpStatus())
                 .body(ResponseData.<T>builder()
+                        .status(responseCode.getHttpStatus())
                         .code(responseCode)
+                        .message(responseCode.getMessage())
                         .data(data)
                         .build()
                 );
@@ -40,7 +47,9 @@ public class ResponseData<T> {
                 .status(responseCode.getHttpStatus())
                 .header(String.valueOf(header))
                 .body(ResponseData.<T>builder()
+                        .status(responseCode.getHttpStatus())
                         .code(responseCode)
+                        .message(responseCode.getMessage())
                         .data(data)
                         .build()
                 );
