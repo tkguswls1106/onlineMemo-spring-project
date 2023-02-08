@@ -1,11 +1,13 @@
 package com.shj.onlinememospringproject.dto.memo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shj.onlinememospringproject.domain.memo.Memo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Getter
 @NoArgsConstructor
@@ -17,8 +19,9 @@ public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 C
     private String modifiedDate;
     private Integer isStar;
 
+    @JsonIgnore
     public LocalDateTime getDateTimeModifiedDate() {  // 날짜 정렬에 사용할 string형식의 날짜를 localDateTime형식으로 변환하는 메소드이다.
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyy. M. d. a h:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm");
         LocalDateTime dateTimeModifiedDate = LocalDateTime.parse(this.modifiedDate, formatter);
         return dateTimeModifiedDate;
     }

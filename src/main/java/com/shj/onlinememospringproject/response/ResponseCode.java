@@ -25,6 +25,7 @@ public enum ResponseCode {
 
     // Memo 관련 성공 응답
     READ_MEMO(StatusItem.OK, MessageItem.READ_MEMO),
+    READ_MEMOLIST(StatusItem.OK, MessageItem.READ_MEMOLIST),
     CREATED_MEMO(StatusItem.CREATED, MessageItem.CREATED_MEMO),
 
     // Memo 관련 실패 응답

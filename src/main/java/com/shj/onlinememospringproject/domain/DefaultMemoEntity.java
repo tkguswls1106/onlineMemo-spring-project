@@ -1,5 +1,6 @@
 package com.shj.onlinememospringproject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,8 +35,10 @@ public abstract class DefaultMemoEntity {
     protected Integer isStar;
 
 
+    // 아마 이건 안쓰일듯하지만 혹여 사용처가 생길지도 몰라 ResponseDto의 메소드와 똑같이 그대로 적어주었다.
+    @JsonIgnore
     public LocalDateTime getDateTimeModifiedDate() {  // 날짜 정렬에 사용할 string형식의 날짜를 localDateTime형식으로 변환하는 메소드이다.
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyy. M. d. a h:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm");
         LocalDateTime dateTimeModifiedDate = LocalDateTime.parse(this.modifiedDate, formatter);
         return dateTimeModifiedDate;
     }

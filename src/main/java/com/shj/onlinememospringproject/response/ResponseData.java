@@ -6,14 +6,20 @@ import lombok.ToString;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+
 @Getter
 @Builder
 @ToString
 public class ResponseData<T> {
 
     private final int status;
-    private final ResponseCode code;
     private final String message;
+    private final ResponseCode code;
+    private final String timestamp;
     private T data;
 
     // response data가 없을때
@@ -22,8 +28,9 @@ public class ResponseData<T> {
                 .status(responseCode.getHttpStatus())
                 .body(ResponseData.builder()
                         .status(responseCode.getHttpStatus())
-                        .code(responseCode)
                         .message(responseCode.getMessage())
+                        .code(responseCode)
+                        .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko"))))
                         .build()
                 );
     }
@@ -34,8 +41,9 @@ public class ResponseData<T> {
                 .status(responseCode.getHttpStatus())
                 .body(ResponseData.<T>builder()
                         .status(responseCode.getHttpStatus())
-                        .code(responseCode)
                         .message(responseCode.getMessage())
+                        .code(responseCode)
+                        .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko"))))
                         .data(data)
                         .build()
                 );
@@ -48,8 +56,9 @@ public class ResponseData<T> {
                 .header(String.valueOf(header))
                 .body(ResponseData.<T>builder()
                         .status(responseCode.getHttpStatus())
-                        .code(responseCode)
                         .message(responseCode.getMessage())
+                        .code(responseCode)
+                        .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko"))))
                         .data(data)
                         .build()
                 );

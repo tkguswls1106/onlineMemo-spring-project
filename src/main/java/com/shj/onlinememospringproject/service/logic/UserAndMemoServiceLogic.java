@@ -42,6 +42,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     public List<MemoResponseDto> findMemosByUserId(Long userId) {  // userId와 일치하는 사용자의 메모들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
+        userJpaRepository.findById(userId).orElseThrow(
+                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+
 //        Sort sort = Sort.by(Sort.Direction.DESC, "id");
 //        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
@@ -54,8 +57,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         }
 
         return memos.stream().map(MemoResponseDto::new)
-                .sorted(Comparator.comparing(MemoResponseDto::getId).reversed()  // 메모 id 내림차순 정렬 후
-                        .thenComparing(MemoResponseDto::getDateTimeModifiedDate).reversed())  // 메모 수정날짜 내림차순 정렬
+                .sorted(Comparator.comparing(MemoResponseDto::getId)  // 메모 id 오름차순 정렬 후
+                        .thenComparing(MemoResponseDto::getDateTimeModifiedDate)  // 메모 수정날짜 오름차순 정렬 후
+                        .reversed())  // 위의 것들을 전부 뒤집어서 내림차순 정렬로 변환
                 .collect(Collectors.toList());
     }
 
@@ -63,6 +67,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     @Override
     public List<UserResponseDto> findUsersByMemoId(Long memoId) {  // memoId와 일치하는 메모의 사용자들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
+
+        memoJpaRepository.findById(memoId).orElseThrow(
+                ()->new NoSuchMemoException());  // 우선 해당 memoId와 일치하는 메모가 존재하는지부터 확인.
 
 //        Sort sort = Sort.by(Sort.Direction.DESC, "id");
 //        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
