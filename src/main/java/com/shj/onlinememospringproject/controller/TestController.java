@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-    private final UserService userService;
     private final UserAndMemoService userAndMemoService;
 
 
