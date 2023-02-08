@@ -4,6 +4,7 @@ import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
+import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoResponseDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.UserAndMemoService;
@@ -21,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserAndMemoService userAndMemoService;
+
 
     @PostMapping
     public ResponseEntity joinUser(@RequestBody UserJoinRequestDto userJoinRequestDto) {  // 회원가입
@@ -52,5 +54,6 @@ public class UserController {
         List<MemoResponseDto> memoResponseDtos = userAndMemoService.findMemosByUserId(userId);
         return ResponseData.toResponseEntity(ResponseCode.READ_MEMOLIST, memoResponseDtos);
     }
+
 
 }

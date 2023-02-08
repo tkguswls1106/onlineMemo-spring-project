@@ -26,9 +26,25 @@ public class Memo extends DefaultMemoEntity implements Serializable {
 
 
     @Builder
-    public Memo(String title, String content) {
+    public Memo(Long id, String title, String content, String modifiedDate, Integer isStar) {
+        this.id = id;
         this.title = title;
         this.content = content;
+        this.modifiedDate = modifiedDate;
+        this.isStar = isStar;
+    }
+
+    @Builder(builderClassName = "MemoUpdateBuilder", builderMethodName = "MemoUpdateBuilder")
+    public Memo(String title, String content) {
+        // 이 빌더는 메모 수정때만 사용할 용도
+        this.title = title;
+        this.content = content;
+    }
+
+    @Builder(builderClassName = "MemoUpdateStarBuilder", builderMethodName = "MemoUpdateStarBuilder")
+    public Memo(Integer isStar) {
+        // 이 빌더는 메모 즐겨찾기 여부 수정때만 사용할 용도
+        this.isStar = isStar;
     }
 
 

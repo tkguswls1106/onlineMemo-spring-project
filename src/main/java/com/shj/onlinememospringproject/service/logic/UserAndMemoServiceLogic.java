@@ -6,9 +6,7 @@ import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemo;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.memo.MemoRequestDto;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
-import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
@@ -18,13 +16,11 @@ import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.response.exception.UserAndMemoDuplicateException;
 import com.shj.onlinememospringproject.service.UserAndMemoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,7 +99,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
                 ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
         // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
-        if(userAndMemoJpaRepository.existsByUserAndMemo(userSecondEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
+        if (userAndMemoJpaRepository.existsByUserAndMemo(userSecondEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
             throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
         }
 
@@ -111,5 +107,25 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         userAndMemoJpaRepository.save(userAndMemoRequestDto.toEntity());  // UserAndMemo 테이블에도 저장.
 
         return findUsersByMemoId(memoId);
+    }
+
+
+
+    // 이건 테스트용
+    @Override
+    @Transactional
+    public List<UserAndMemoResponseDto> findAllUserAndMemo(Long userId, Long memoId) {  // 사용자와 메모의 관계 상황을 반환 기능.
+
+        User userEntity = userJpaRepository.findById(userId).orElseThrow(
+                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
+
+        Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
+                ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
+
+        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAllByUserAndMemo(userEntity, memoEntity);
+        List<UserAndMemoResponseDto> userAndMemoResponseDtos = userAndMemos.stream().map(UserAndMemoResponseDto::new)
+                .collect(Collectors.toList());
+
+        return userAndMemoResponseDtos;
     }
 }

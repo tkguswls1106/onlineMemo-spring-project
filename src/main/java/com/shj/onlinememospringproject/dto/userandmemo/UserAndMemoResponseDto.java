@@ -24,8 +24,11 @@ public class UserAndMemoResponseDto {  // 요청받아 가져오는 DTO. 예를�
                 .username(entity.getUser().getUsername())
                 .build();
         this.memo = Memo.builder()
+                .id(entity.getMemo().getId())
                 .title(entity.getMemo().getTitle())
                 .content(entity.getMemo().getContent())
+                .modifiedDate(entity.getMemo().getModifiedDate())
+                .isStar(entity.getMemo().getIsStar())
                 .build();
     }
 }

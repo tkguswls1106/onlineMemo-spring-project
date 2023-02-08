@@ -24,9 +24,11 @@ public enum ResponseCode {
     // ===================== //
 
     // Memo 관련 성공 응답
+    CREATED_MEMO(StatusItem.CREATED, MessageItem.CREATED_MEMO),
     READ_MEMO(StatusItem.OK, MessageItem.READ_MEMO),
     READ_MEMOLIST(StatusItem.OK, MessageItem.READ_MEMOLIST),
-    CREATED_MEMO(StatusItem.CREATED, MessageItem.CREATED_MEMO),
+    UPDATE_MEMO(StatusItem.NO_CONTENT, MessageItem.UPDATE_MEMO),
+    DELETE_MEMO(StatusItem.NO_CONTENT, MessageItem.DELETE_MEMO),
 
     // Memo 관련 실패 응답
     NOT_FOUND_MEMO(StatusItem.NOT_FOUND, MessageItem.NOT_FOUND_MEMO),

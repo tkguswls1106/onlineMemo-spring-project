@@ -1,22 +1,17 @@
 package com.shj.onlinememospringproject.service.logic;
 
-import com.shj.onlinememospringproject.domain.memo.Memo;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.memo.MemoRequestDto;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
-import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
-import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,7 +3,7 @@ package com.shj.onlinememospringproject.service;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.memo.MemoRequestDto;
+import com.shj.onlinememospringproject.dto.memo.MemoSaveRequestDto;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.service.logic.MemoServiceLogic;
 import com.shj.onlinememospringproject.service.logic.UserAndMemoServiceLogic;
@@ -39,15 +39,17 @@ public class MemoServiceTest {
     @DisplayName("메모 저장_Test")
     // @Transactional
     void memoSave_Test() {  // 신규 메모 생성하고 memoId 반환 기능.
+        Long userId = Long.valueOf(1);
         String title = "메모제목입력";
         String content = "메모내용입력";
 
-        MemoRequestDto memoRequestDto = MemoRequestDto.builder()
+        MemoSaveRequestDto memoSaveRequestDto = MemoSaveRequestDto.builder()
+                .userId(userId)
                 .title(title)
                 .content(content)
                 .build();
 
-        memoServiceLogic.saveMemo(Long.valueOf(1), memoRequestDto);  // userId가 1인 사용자의 메모 생성
+        memoServiceLogic.saveMemo(memoSaveRequestDto);  // userId가 1인 사용자의 메모 생성
     }
 
     @Test

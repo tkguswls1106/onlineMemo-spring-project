@@ -23,7 +23,7 @@ public abstract class DefaultMemoEntity {
     // 시간 업데이트 자동화시킴.
     @Column(name = "modified_date")
     @LastModifiedDate
-    private String modifiedDate;
+    protected String modifiedDate;
 
 //    @PrePersist  // 해당 엔티티를 저장하기 이전에 실행된다.
 //    public void onPrePersist(){
