@@ -1,6 +1,7 @@
 package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.friendship.FriendshipSendRequestDto;
+import com.shj.onlinememospringproject.dto.friendship.FriendshipUpdateRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
@@ -26,15 +27,27 @@ public class FriendshipController {
     }
 
     @GetMapping("/senders")
-    public ResponseEntity findSendersByUserId(@PathVariable Long userId) {  // 해당 userId 사용자의 친구요청 응답대기중인 요청발신자 사용자들 리스트 조회.
+    public ResponseEntity findSendersByUserId(@PathVariable Long userId) {  // 해당 userId 사용자의 친구요청 응답대기중인 요청발신자 사용자들 리스트 조회
         List<UserResponseDto> userResponseDtos = friendshipService.findSendersByUserId(userId);
         return ResponseData.toResponseEntity(ResponseCode.READ_SENDERLIST, userResponseDtos);
     }
 
     @GetMapping("/friends")
-    public ResponseEntity findFriendsByUserId(@PathVariable Long userId) {  // 해당 userId 사용자의 친구들 리스트 조회.
+    public ResponseEntity findFriendsByUserId(@PathVariable Long userId) {  // 해당 userId 사용자의 친구들 리스트 조회
         List<UserResponseDto> userResponseDtos = friendshipService.findFriendsByUserId(userId);
         return ResponseData.toResponseEntity(ResponseCode.READ_FRIENDLIST, userResponseDtos);
+    }
+
+    @PutMapping("/friends")
+    public ResponseEntity updateFriendship(@PathVariable Long userId, @RequestBody FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 신청된 친구요청에 대한 친구 맺기 여부 수정
+        friendshipService.updateFriendship(userId, friendshipUpdateRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.UPDATE_FRIENDSHIP);
+    }
+
+    @DeleteMapping("/friends")
+    public ResponseEntity deleteFriendship(@PathVariable Long userId, @RequestBody Long senderUserId) {  // 친구상태 관계 해지
+        friendshipService.deleteFriendship(userId, senderUserId);
+        return ResponseData.toResponseEntity(ResponseCode.DELETE_FRIENDSHIP);
     }
 
 }

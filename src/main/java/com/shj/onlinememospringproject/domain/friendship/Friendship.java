@@ -33,6 +33,15 @@ public class Friendship extends DefaultFriendshipEntity implements Serializable 
         this.senderUserId = senderUserId;
     }
 
+    @Builder(builderClassName = "FriendshipUpdateBuilder", builderMethodName = "FriendshipUpdateBuilder")
+    public Friendship(Long senderUserId, Integer isFriend, Integer isWait) {
+        // 이 빌더는 친구요청 관계 수정때만 사용할 용도
+        this.senderUserId = senderUserId;
+
+        this.isFriend = isFriend;
+        this.isWait = isWait;
+    }
+
 
     // 초기 친구요청 상태 => isFriend:0, isWait:1
     // 친구요청 수락 상태 => isFriend:1, isWait:0 => 친구 맺기 성공
@@ -40,8 +49,9 @@ public class Friendship extends DefaultFriendshipEntity implements Serializable 
     // isFriend:1, isWait:1 => 에러임. 예외처리 조치.
 
     // 수정(업데이트) 기능
-    public void updateFriendship(Integer isFriend, Integer isWait) {  // 친구요청 수락시 업데이트 기능
-        this.isFriend = isFriend;
-        this.isWait = isWait;
-    }
+    // 이는 따로 FriendshipJpaRepository 인터페이스에 @Query로 updateFriendship메소드를 따로 작성해주었다. 그 이유는 FriendshipJpaRepository 인터페이스에 주석으로 첨부하였음.
+//    public void updateFriendship(Integer isFriend, Integer isWait) {  // 친구요청 수락시 업데이트 기능
+//        this.isFriend = isFriend;
+//        this.isWait = isWait;
+//    }
 }

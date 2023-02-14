@@ -48,4 +48,16 @@ public class GlobalExceptionHandler {
         return ResponseData.toResponseEntity(ResponseCode.DUPLICATE_FRIENDSHIP);
     }
 
+    @ExceptionHandler(FriendshipBadRequestException.class)
+    public ResponseEntity handleFriendshipBadRequestException(FriendshipBadRequestException ex) {
+        log.error("handleFriendshipBadRequestException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.BAD_REQUEST_FRIENDSHIP);
+    }
+
+    @ExceptionHandler(NoSuchFriendshipException.class)
+    public ResponseEntity handleNoSuchFriendshipException(NoSuchFriendshipException ex) {
+        log.error("handleNoSuchFriendshipException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.NOT_FOUND_FRIENDSHIP);
+    }
+
 }

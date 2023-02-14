@@ -18,8 +18,8 @@ public enum ResponseCode {
     DELETE_USER(StatusItem.NO_CONTENT, MessageItem.DELETE_USER),
 
     // User 관련 실패 응답
-    DUPLICATE_USER(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_USER),
     NOT_FOUND_USER(StatusItem.NOT_FOUND, MessageItem.NOT_FOUND_USER),
+    DUPLICATE_USER(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_USER),
 
     // ===================== //
 
@@ -46,9 +46,13 @@ public enum ResponseCode {
     CREATED_SENDFRIENDSHIP(StatusItem.CREATED, MessageItem.CREATED_SENDFRIENDSHIP),
     READ_SENDERLIST(StatusItem.OK, MessageItem.READ_SENDERLIST),
     READ_FRIENDLIST(StatusItem.OK, MessageItem.READ_FRIENDLIST),
+    UPDATE_FRIENDSHIP(StatusItem.NO_CONTENT, MessageItem.UPDATE_FRIENDSHIP),
+    DELETE_FRIENDSHIP(StatusItem.NO_CONTENT, MessageItem.DELETE_FRIENDSHIP),
 
     // Friendship 관련 실패 응답
+    NOT_FOUND_FRIENDSHIP(StatusItem.NOT_FOUND, MessageItem.NOT_FOUND_FRIENDSHIP),
     DUPLICATE_FRIENDSHIP(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_FRIENDSHIP),
+    BAD_REQUEST_FRIENDSHIP(StatusItem.BAD_REQUEST, MessageItem.BAD_REQUEST_FRIENDSHIP),
 
     // ===================== //
 
