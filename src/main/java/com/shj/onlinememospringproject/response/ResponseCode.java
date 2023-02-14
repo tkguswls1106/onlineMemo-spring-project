@@ -44,6 +44,8 @@ public enum ResponseCode {
 
     // Friendship 관련 성공 응답
     CREATED_SENDFRIENDSHIP(StatusItem.CREATED, MessageItem.CREATED_SENDFRIENDSHIP),
+    READ_SENDERLIST(StatusItem.OK, MessageItem.READ_SENDERLIST),
+    READ_FRIENDLIST(StatusItem.OK, MessageItem.READ_FRIENDLIST),
 
     // Friendship 관련 실패 응답
     DUPLICATE_FRIENDSHIP(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_FRIENDSHIP),

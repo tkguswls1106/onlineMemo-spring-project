@@ -21,8 +21,8 @@ public class MemoController {
 
     @PostMapping
     public ResponseEntity saveMemo(@RequestBody MemoSaveRequestDto memoSaveRequestDto) {  // 신규 개인메모 생성 (참고로 여기 memoSaveRequestDto 안에 userId도 들어있음.)
-        memoService.saveMemo(memoSaveRequestDto);
-        return ResponseData.toResponseEntity(ResponseCode.CREATED_MEMO);
+        Long memoId = memoService.saveMemo(memoSaveRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.CREATED_MEMO, memoId);
     }
 
     @GetMapping("/{memoId}")

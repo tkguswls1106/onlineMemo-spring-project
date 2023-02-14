@@ -21,6 +21,8 @@ public class MessageItem {
     public static final String DUPLICATE_USERANDMEMO = "ERROR - 사용자와 메모 관계 중복 에러";
 
     public static final String CREATED_SENDFRIENDSHIP = "SUCCESS - 친구요청 보내기 성공";
+    public static final String READ_SENDERLIST = "SUCCESS - 회원에게 친구요청 보낸 사용자들 목록 조회 성공";
+    public static final String READ_FRIENDLIST = "SUCCESS - 회원의 친구 목록 조회 성공";
     public static final String DUPLICATE_FRIENDSHIP = "ERROR - 친구요청 중복 에러";
 
     public static final String INTERNAL_SERVER_ERROR = "ERROR - 서버 내부 에러";

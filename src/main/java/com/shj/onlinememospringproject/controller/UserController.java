@@ -26,8 +26,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity joinUser(@RequestBody UserJoinRequestDto userJoinRequestDto) {  // 회원가입
-        userService.save(userJoinRequestDto);
-        return ResponseData.toResponseEntity(ResponseCode.CREATED_USER);
+        Long userId = userService.save(userJoinRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.CREATED_USER, userId);
     }
 
     @GetMapping("/{userId}")

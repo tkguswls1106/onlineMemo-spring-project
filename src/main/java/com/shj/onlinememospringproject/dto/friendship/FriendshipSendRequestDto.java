@@ -10,12 +10,10 @@ public class FriendshipSendRequestDto {  // 요청하는 DTO. 예를들어 CRUD�
     // 신규 친구요청 생성 전용의 RequestDto
 
     private String loginId;  // 친구요청 받을 사용자의 loginId
-    private Long senderUserId;  // 친구요청을 신청하는(보내는) 사용자의 userId
 
     @Builder
-    public FriendshipSendRequestDto(String loginId, Long senderUserId) {
+    public FriendshipSendRequestDto(String loginId) {
         this.loginId = loginId;
-        this.senderUserId = senderUserId;
     }
 
     // FriendshipSendRequestDto를 클라이언트에게 받아, 그 안의 loginId로 user엔티티를 찾아오고

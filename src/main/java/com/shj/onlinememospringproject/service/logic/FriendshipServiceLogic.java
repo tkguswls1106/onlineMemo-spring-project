@@ -31,9 +31,9 @@ public class FriendshipServiceLogic implements FriendshipService {
 
     @Transactional
     @Override
-    public void sendFriendship(FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
+    public void sendFriendship(Long senderUserId, FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
 
-        User senderUserEntity = userJpaRepository.findById(friendshipSendRequestDto.getSenderUserId()).orElseThrow(
+        User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
                 ()->new NoSuchUserException());  // senderUserId에 해당되는 사용자가 존재하는지 여부 확인. 굳이 리턴받아 값을 할당한 이유는 요청 반대의 경우도 확인해야하기에 적었다.
         // 이는 save로 저장하지 않고 확인만 할것이기에, 따로 보안되어야할 컬럼을 솎아내는 작업을 하지 않아도 된다.
 
@@ -42,14 +42,14 @@ public class FriendshipServiceLogic implements FriendshipService {
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
         User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
-        if (friendshipJpaRepository.existsByUserAndSenderUserId(userEntity, friendshipSendRequestDto.getSenderUserId())) {  // 이미 DB에 존재하는 친구요청일 경우라면,
+        if (friendshipJpaRepository.existsByUserAndSenderUserId(userEntity, senderUserId)) {  // 이미 DB에 존재하는 친구요청일 경우라면,
             throw new FriendshipDuplicateException();  // 친구요청 관계 중복 예외처리.
         }
         else if (friendshipJpaRepository.existsByUserAndSenderUserId(senderUserEntity, userEntity.getId())) {  // 또는 반대로 이미 친구요청을 받은상태인데 친구요청한 경우라면,
             throw new FriendshipDuplicateException();  // 친구요청 관계 중복 예외처리.
         }
 
-        FriendshipRequestDto friendshipRequestDto = new FriendshipRequestDto(userSecondEntity, friendshipSendRequestDto.getSenderUserId());
+        FriendshipRequestDto friendshipRequestDto = new FriendshipRequestDto(userSecondEntity, senderUserId);
         friendshipJpaRepository.save(friendshipRequestDto.toEntity());
     }
 
