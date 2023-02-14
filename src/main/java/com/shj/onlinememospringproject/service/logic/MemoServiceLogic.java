@@ -97,6 +97,10 @@ public class MemoServiceLogic implements MemoService {
         if (memoHasUserCount > 1) {  // 해당 메모가 개인메모가 아니라면 (공동 메모라면)
             userAndMemoJpaRepository.deleteByUserAndMemo(userEntity, memoEntity);  // 메모 삭제없이 사용자와메모 관계만 삭제.
             // 즉, 메모 삭제 없이, 공동메모 그룹 탈퇴 처리만 하였음.
+
+            if (memoHasUserCount == 2) {  // 그룹 탈퇴로 인해 해당 메모의 남은 사용자가 2명에서 1명으로 개인 메모가 되었을경우 (즉, 원래 2명이었을 경우)
+                updateIsStar(memoId, new MemoUpdateStarRequestDto(0));  // 즐겨찾기 여부를 0으로 다시 초기화함.
+            }
         }
         else {  // 해당 메모가 개인메모라면
             userAndMemoJpaRepository.deleteByUserAndMemo(userEntity, memoEntity);  // 부모 테이블인 Memo보다 먼저, 자식 테이블인 UserAndMemo에서 사용자와 메모와의 관계부터 삭제함.
