@@ -44,8 +44,8 @@ public class MemoController {
     }
 
     @DeleteMapping("/{memoId}")
-    public ResponseEntity deleteMemo(@RequestBody Integer userId, @PathVariable Long memoId) {  // 메모 삭제. 만약 개인메모가 아닐 경우에는 메모를 삭제하지 않고 메모그룹 탈퇴로 처리함.
-        memoService.deleteMemo(Long.valueOf(userId), memoId);
+    public ResponseEntity deleteMemo(@RequestBody Long userId, @PathVariable Long memoId) {  // 메모 삭제. 만약 개인메모가 아닐 경우에는 메모를 삭제하지 않고 메모그룹 탈퇴로 처리함.
+        memoService.deleteMemo(userId, memoId);
         return ResponseData.toResponseEntity(ResponseCode.DELETE_MEMO);
         // !!! 나중에 이거 메모 삭제 성공시, 사용자의 전체 메모리스트가 보이는 메인화면으로 리다이렉트 시키도록 변경시킬것. !!!
     }
