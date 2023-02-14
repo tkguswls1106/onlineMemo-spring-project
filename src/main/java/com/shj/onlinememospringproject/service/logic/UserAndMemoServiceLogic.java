@@ -98,7 +98,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
                 ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
         // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
-        if (userAndMemoJpaRepository.existsByUserAndMemo(userSecondEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
+        if (userAndMemoJpaRepository.existsByUserAndMemo(userEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
             throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
         }
 

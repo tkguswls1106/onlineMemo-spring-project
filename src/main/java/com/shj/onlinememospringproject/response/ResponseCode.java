@@ -36,9 +36,17 @@ public enum ResponseCode {
     // ===================== //
 
     // UserAndMemo 관련 성공 응답
-    DUPLICATE_USERANDMEMO(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_USERANDMEMO),
 
     // UserAndMemo 관련 실패 응답
+    DUPLICATE_USERANDMEMO(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_USERANDMEMO),
+
+    // ===================== //
+
+    // Friendship 관련 성공 응답
+    CREATED_SENDFRIENDSHIP(StatusItem.CREATED, MessageItem.CREATED_SENDFRIENDSHIP),
+
+    // Friendship 관련 실패 응답
+    DUPLICATE_FRIENDSHIP(StatusItem.BAD_REQUEST, MessageItem.DUPLICATE_FRIENDSHIP),
 
     // ===================== //
 
