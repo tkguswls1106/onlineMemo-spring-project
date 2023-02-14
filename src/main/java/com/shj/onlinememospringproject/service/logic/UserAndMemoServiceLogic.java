@@ -53,10 +53,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         }
 
         return memos.stream().map(MemoResponseDto::new)
-                .sorted(Comparator.comparing(MemoResponseDto::getId)  // 메모 id 오름차순 정렬 후
-                        .thenComparing(MemoResponseDto::getDateTimeModifiedDate)  // 메모 수정날짜 오름차순 정렬 후
-                        .reversed())  // 위의 것들을 전부 뒤집어서 내림차순 정렬로 변환
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(MemoResponseDto::getId, Comparator.reverseOrder()))  // 메모 id 내림차순 정렬 후
+                .sorted(Comparator.comparing(MemoResponseDto::getDateTimeModifiedDate, Comparator.reverseOrder()))  // 메모 수정날짜 내림차순 정렬
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환
     }
 
     @Transactional(readOnly = true)
@@ -79,9 +78,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         }
 
         return users.stream().map(UserResponseDto::new)
-                .sorted(Comparator.comparing(UserResponseDto::getId).reversed()  // 사용자 id 내림차순 정렬 후
-                        .thenComparing(UserResponseDto::getUsername))  // 사용자 이름 오름차순 정렬
-                .collect(Collectors.toList());  // 사용자 이름 오름차순 정렬하여 반환.
+                .sorted(Comparator.comparing(UserResponseDto::getId, Comparator.reverseOrder()))  // 사용자 id 내림차순 정렬 후
+                .sorted(Comparator.comparing(UserResponseDto::getUsername))  // 사용자 이름 오름차순 정렬
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환
     }
 
     // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.

@@ -92,13 +92,13 @@ public class MemoServiceLogic implements MemoService {
                 ()->new NoSuchMemoException());
 
         List<UserResponseDto> userResponseDtos = userAndMemoServiceLogic.findUsersByMemoId(memoEntity.getId());  // 해당 memoId의 메모를 가지고있는 모든 사용자들 리스트 가져오기.
-        int memoHasUserCount = userResponseDtos.size();  // 해당 메모를 가지고 있는 사용자의 수를 카운트.
+        int memoHasUsersCount = userResponseDtos.size();  // 해당 메모를 가지고 있는 사용자의 수를 카운트.
 
-        if (memoHasUserCount > 1) {  // 해당 메모가 개인메모가 아니라면 (공동 메모라면)
+        if (memoHasUsersCount > 1) {  // 해당 메모가 개인메모가 아니라면 (공동 메모라면)
             userAndMemoJpaRepository.deleteByUserAndMemo(userEntity, memoEntity);  // 메모 삭제없이 사용자와메모 관계만 삭제.
             // 즉, 메모 삭제 없이, 공동메모 그룹 탈퇴 처리만 하였음.
 
-            if (memoHasUserCount == 2) {  // 그룹 탈퇴로 인해 해당 메모의 남은 사용자가 2명에서 1명으로 개인 메모가 되었을경우 (즉, 원래 2명이었을 경우)
+            if (memoHasUsersCount == 2) {  // 그룹 탈퇴로 인해 해당 메모의 남은 사용자가 2명에서 1명으로 개인 메모가 되었을경우 (즉, 원래 2명이었을 경우)
                 updateIsStar(memoId, new MemoUpdateStarRequestDto(0));  // 즐겨찾기 여부를 0으로 다시 초기화함.
             }
         }

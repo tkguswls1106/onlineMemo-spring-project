@@ -50,10 +50,19 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/memos")
-    public ResponseEntity UserLoadMemos(@PathVariable Long userId) {  // 사용자의 모든 메모들 리스트 조회
+    public ResponseEntity UserLoadMemos(@PathVariable Long userId) {  // 사용자의 모든 메모들 리스트 조회 & 각 메모 사용하는 회원들 리스트와 몇명인지도 함께 조회
         List<MemoResponseDto> memoResponseDtos = userAndMemoService.findMemosByUserId(userId);
+
+        for (int i = 0; i < memoResponseDtos.size(); i++) {
+            memoResponseDtos.get(i).setUserResponseDtos(
+                    userAndMemoService.findUsersByMemoId(memoResponseDtos.get(i).getId())
+            );
+            memoResponseDtos.get(i).setMemoHasUsersCount(
+                    userAndMemoService.findUsersByMemoId(memoResponseDtos.get(i).getId())
+            );
+        }
+
         return ResponseData.toResponseEntity(ResponseCode.READ_MEMOLIST, memoResponseDtos);
     }
-
 
 }

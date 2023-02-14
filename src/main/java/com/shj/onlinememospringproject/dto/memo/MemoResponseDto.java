@@ -2,11 +2,14 @@ package com.shj.onlinememospringproject.dto.memo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shj.onlinememospringproject.domain.memo.Memo;
+import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Getter
@@ -18,6 +21,16 @@ public class MemoResponseDto {  // 요청받아 가져오는 DTO. 예를들어 C
     private String content;
     private String modifiedDate;
     private Integer isStar;
+
+    private List<UserResponseDto> userResponseDtos;  // 해당 메모를 가지고 있는 사용자들의 리스트
+    private Integer memoHasUsersCount;  // 해당 메모를 가지고 있는 사용자의 수를 카운트.
+
+    public void setUserResponseDtos(List<UserResponseDto> userResponseDtos) {
+        this.userResponseDtos = userResponseDtos;
+    }
+    public void setMemoHasUsersCount(List<UserResponseDto> userResponseDtos) {
+        this.memoHasUsersCount = userResponseDtos.size();
+    }
 
     @JsonIgnore
     public LocalDateTime getDateTimeModifiedDate() {  // 날짜 정렬에 사용할 string형식의 날짜를 localDateTime형식으로 변환하는 메소드이다.
