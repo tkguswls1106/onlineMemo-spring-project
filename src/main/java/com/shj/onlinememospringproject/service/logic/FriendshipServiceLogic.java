@@ -118,14 +118,14 @@ public class FriendshipServiceLogic implements FriendshipService {
 
     @Transactional
     @Override
-    public void updateFriendship(Long userId, FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 친구요청 수신자는 userId, 발신자는 senderUserId에 해당되는 요청 친구에 대한 친구 맺기 여부 수정 기능.
+    public void updateFriendship(Long userId, Long senderUserId, FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 친구요청 수신자는 userId, 발신자는 senderUserId에 해당되는 요청 친구에 대한 친구 맺기 여부 수정 기능.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
-        User senderUserEntity = userJpaRepository.findById(friendshipUpdateRequestDto.getSenderUserId()).orElseThrow(
+        User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 senderUserId와 일치하는 사용자가 존재하는지부터 확인.
 
-        Friendship friendshipEntity = friendshipJpaRepository.findByUserAndSenderUserId(userEntity, friendshipUpdateRequestDto.getSenderUserId()).orElseThrow(
+        Friendship friendshipEntity = friendshipJpaRepository.findByUserAndSenderUserId(userEntity, senderUserId).orElseThrow(
                 ()->new NoSuchFriendshipException());  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지 확인.
 
         if (friendshipUpdateRequestDto.getIsFriend() == 1 && friendshipUpdateRequestDto.getIsWait() == 0) {  // 친구요청 수락일 경우
@@ -146,6 +146,9 @@ public class FriendshipServiceLogic implements FriendshipService {
             friendshipJpaRepository.deleteById(friendshipEntity.getId());  // 친구요청 관계 자체를 삭제시킴. 이는 요청만 온 상태에서 삭제이므로, 반대의 경우는 삭제하지 않아도 된다.
         }
         else if (friendshipUpdateRequestDto.getIsFriend() == 1 && friendshipUpdateRequestDto.getIsWait() == 1) {  // 잘못된 친구관계 수정 요청일 경우
+            throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
+        }
+        else if (friendshipUpdateRequestDto.getIsFriend() == 0 && friendshipUpdateRequestDto.getIsWait() == 1) {  // 잘못된 친구관계 수정 요청일 경우
             throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
         }
     }

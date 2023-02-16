@@ -9,15 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FriendshipUpdateRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. method로는 post.
 
-    private Long senderUserId;
-
     private Integer isFriend;
     private Integer isWait;
 
     @Builder
-    public FriendshipUpdateRequestDto(Long senderUserId, Integer isFriend, Integer isWait) {
-        this.senderUserId = senderUserId;
-
+    public FriendshipUpdateRequestDto(Integer isFriend, Integer isWait) {
         this.isFriend = isFriend;
         this.isWait = isWait;
     }

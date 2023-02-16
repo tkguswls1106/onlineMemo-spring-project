@@ -5,10 +5,7 @@ import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.memo.MemoSaveRequestDto;
-import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
-import com.shj.onlinememospringproject.dto.memo.MemoUpdateRequestDto;
-import com.shj.onlinememospringproject.dto.memo.MemoUpdateStarRequestDto;
+import com.shj.onlinememospringproject.dto.memo.*;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
@@ -33,11 +30,10 @@ public class MemoServiceLogic implements MemoService {
 
     @Transactional
     @Override
-    public Long saveMemo(MemoSaveRequestDto memoSaveRequestDto) {  // 신규 메모 생성하고 memoId 반환 기능.
-        // 사용자 없이 메모 단독으로는 생성이 불가능하므로 나중에 컨트롤러에서 Requestbody로 memoSaveRequestDto 안에 userId도 함께 받아줌.
+    public MemoSaveResponseDto saveMemo(Long userId, MemoSaveRequestDto memoSaveRequestDto) {  // 신규 메모 생성하고 userId와 memo 반환 기능.
+        // 사용자 없이 메모 단독으로는 생성이 불가능하므로 userId도 함께 받아줌.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
 
-        Long userId = memoSaveRequestDto.getUserId();
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  //  userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
@@ -48,7 +44,7 @@ public class MemoServiceLogic implements MemoService {
         UserAndMemoRequestDto userAndMemoRequestDto = new UserAndMemoRequestDto(userSecondEntity, memoEntity);
         userAndMemoJpaRepository.save(userAndMemoRequestDto.toEntity());  // UserAndMemo 테이블에도 저장.
 
-        return memoEntity.getId();
+        return new MemoSaveResponseDto(userId, memoEntity);
     }
 
     @Transactional(readOnly = true)

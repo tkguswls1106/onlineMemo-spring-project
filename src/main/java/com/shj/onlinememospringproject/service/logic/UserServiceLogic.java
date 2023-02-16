@@ -30,7 +30,7 @@ public class UserServiceLogic implements UserService {
 
     @Transactional
     @Override
-    public Long save(UserJoinRequestDto userJoinRequestDto) {  // 신규 사용자 생성하고 userId 반환 기능.
+    public UserResponseDto save(UserJoinRequestDto userJoinRequestDto) {  // 신규 사용자 생성하고 user 반환 기능.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
 
         String newLoginId = userJoinRequestDto.getLoginId();
@@ -40,7 +40,7 @@ public class UserServiceLogic implements UserService {
                 });
 
         User entity = userJpaRepository.save(userJoinRequestDto.toEntity());
-        return entity.getId();
+        return new UserResponseDto(entity);
     }
 
     @Transactional(readOnly = true)

@@ -44,12 +44,11 @@ public class MemoServiceTest {
         String content = "메모내용입력";
 
         MemoSaveRequestDto memoSaveRequestDto = MemoSaveRequestDto.builder()
-                .userId(userId)
                 .title(title)
                 .content(content)
                 .build();
 
-        memoServiceLogic.saveMemo(memoSaveRequestDto);  // userId가 1인 사용자의 메모 생성
+        memoServiceLogic.saveMemo(userId, memoSaveRequestDto);  // userId가 1인 사용자의 메모 생성
     }
 
     @Test

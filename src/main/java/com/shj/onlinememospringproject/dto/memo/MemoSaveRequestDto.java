@@ -10,14 +10,11 @@ import lombok.NoArgsConstructor;
 public class MemoSaveRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. method로는 post.
     // 신규 개인메모 생성 전용의 RequestDto
 
-    private Long userId;  // 메모작성할 사용자의 userId
-
     private String title;  // 메모 작성 제목
     private String content;  // 메모 작성 내용
 
     @Builder
-    public MemoSaveRequestDto(Long userId, String title, String content) {
-        this.userId = userId;
+    public MemoSaveRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
     }

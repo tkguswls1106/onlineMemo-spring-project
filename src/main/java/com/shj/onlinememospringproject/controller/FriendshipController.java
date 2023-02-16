@@ -38,14 +38,14 @@ public class FriendshipController {
         return ResponseData.toResponseEntity(ResponseCode.READ_FRIENDLIST, userResponseDtos);
     }
 
-    @PutMapping("/friends")
-    public ResponseEntity updateFriendship(@PathVariable Long userId, @RequestBody FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 신청된 친구요청에 대한 친구 맺기 여부 수정
-        friendshipService.updateFriendship(userId, friendshipUpdateRequestDto);
+    @PutMapping("/senders/{senderUserId}")
+    public ResponseEntity updateFriendship(@PathVariable Long userId, @PathVariable Long senderUserId, @RequestBody FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 신청된 친구요청에 대한 친구 맺기 여부 수정
+        friendshipService.updateFriendship(userId, senderUserId, friendshipUpdateRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.UPDATE_FRIENDSHIP);
     }
 
-    @DeleteMapping("/friends")
-    public ResponseEntity deleteFriendship(@PathVariable Long userId, @RequestBody Long senderUserId) {  // 친구상태 관계 해지
+    @DeleteMapping("/friends/{senderUserId}")
+    public ResponseEntity deleteFriendship(@PathVariable Long userId, @PathVariable Long senderUserId) {  // 친구상태 관계 해지
         friendshipService.deleteFriendship(userId, senderUserId);
         return ResponseData.toResponseEntity(ResponseCode.DELETE_FRIENDSHIP);
     }
