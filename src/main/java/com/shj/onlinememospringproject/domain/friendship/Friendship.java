@@ -22,7 +22,6 @@ public class Friendship extends DefaultFriendshipEntity implements Serializable 
     @JoinColumn(name = "user_id")  // 친구요청 받은 유저.
     private User user;
 
-    // 나중에 반드시 같은 user_id 에 대하여 같은 sender_user_id 가 안나오도록 조건문으로 중복안되게 막도록하자!
     @Column(name = "sender_user_id")  // 친구요청 보낸 유저.
     private Long senderUserId;
 

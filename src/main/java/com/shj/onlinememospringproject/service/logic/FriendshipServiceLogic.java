@@ -45,6 +45,10 @@ public class FriendshipServiceLogic implements FriendshipService {
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // friendshipJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
         User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
+        if (senderUserId == userEntity.getId()) {  // 자신이 자신에게 친구요청을 신청하려고 한다면,
+            throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
+        }
+
         if (friendshipJpaRepository.existsByUserAndSenderUserId(userEntity, senderUserId)) {  // 이미 DB에 존재하는 친구요청일 경우라면,
             throw new FriendshipDuplicateException();  // 친구요청 관계 중복 예외처리.
         }
