@@ -4,10 +4,7 @@ import com.shj.onlinememospringproject.domain.friendship.Friendship;
 import com.shj.onlinememospringproject.domain.friendship.FriendshipJpaRepository;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
-import com.shj.onlinememospringproject.dto.friendship.FriendshipRequestDto;
-import com.shj.onlinememospringproject.dto.friendship.FriendshipResponseDto;
-import com.shj.onlinememospringproject.dto.friendship.FriendshipSendRequestDto;
-import com.shj.onlinememospringproject.dto.friendship.FriendshipUpdateRequestDto;
+import com.shj.onlinememospringproject.dto.friendship.*;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.exception.FriendshipBadRequestException;
@@ -34,7 +31,7 @@ public class FriendshipServiceLogic implements FriendshipService {
 
     @Transactional
     @Override
-    public void sendFriendship(Long senderUserId, FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
+    public FriendshipSendResponseDto sendFriendship(Long senderUserId, FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
 
         User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
                 ()->new NoSuchUserException());  // senderUserId에 해당되는 사용자가 존재하는지 여부 확인. 굳이 리턴받아 값을 할당한 이유는 요청 반대의 경우도 확인해야하기에 적었다.
@@ -58,6 +55,8 @@ public class FriendshipServiceLogic implements FriendshipService {
 
         FriendshipRequestDto friendshipRequestDto = new FriendshipRequestDto(userSecondEntity, senderUserId);
         friendshipJpaRepository.save(friendshipRequestDto.toEntity());
+
+        return new FriendshipSendResponseDto(senderUserId, userSecondEntity);
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,7 @@
 package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.friendship.FriendshipSendRequestDto;
+import com.shj.onlinememospringproject.dto.friendship.FriendshipSendResponseDto;
 import com.shj.onlinememospringproject.dto.friendship.FriendshipUpdateRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
@@ -22,8 +23,8 @@ public class FriendshipController {
 
     @PostMapping("/friends")
     public ResponseEntity sendFriendship(@PathVariable Long userId, @RequestBody FriendshipSendRequestDto friendshipSendRequestDto) {  // 신규 친구요청 생성
-        friendshipService.sendFriendship(userId, friendshipSendRequestDto);
-        return ResponseData.toResponseEntity(ResponseCode.CREATED_SENDFRIENDSHIP);  // 이건 굳이 반환데이터를 보여줄 필요가 없을것같아서 void로 만들고 보여주지 않겠음.
+        FriendshipSendResponseDto friendshipSendResponseDto = friendshipService.sendFriendship(userId, friendshipSendRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.CREATED_SENDFRIENDSHIP, friendshipSendResponseDto);
     }
 
     @GetMapping("/senders")
