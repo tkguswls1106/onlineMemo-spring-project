@@ -44,20 +44,20 @@ public class UserAndMemoServiceTest {
         // userId가 1인 사용자의 메모들의 개수가 3개가 맞는가?
     }
 
-    @Test
-    @DisplayName("메모에 사용자 초대_Test")
-        // @Transactional
-    void inviteUser_Test() {  // memoId와 userId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
-        List<UserResponseDto> userResponseDtos = userAndMemoServiceLogic.inviteUserToMemo(
-                Long.valueOf(3),  // userId가 3인 친구(사용자)를
-                Long.valueOf(2)  // memoId가 2인 메모에 초대
-                // 했을때 해당 메모의 사용자는 몇명?
-        );
-
-        int countUsers = userResponseDtos.size();  // 사용자 몇명인가
-
-        assertThat(countUsers).isEqualTo(2);  // 해당 메모의 현재 사용자가 2명이 맞는가?
-    }
+//    @Test
+//    @DisplayName("메모에 사용자 초대_Test")
+//        // @Transactional
+//    void inviteUser_Test() {  // memoId와 userId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
+//        List<UserResponseDto> userResponseDtos = userAndMemoServiceLogic.inviteUserToMemo(
+//                Long.valueOf(3),  // userId가 3인 친구(사용자)를
+//                Long.valueOf(2)  // memoId가 2인 메모에 초대
+//                // 했을때 해당 메모의 사용자는 몇명?
+//        );
+//
+//        int countUsers = userResponseDtos.size();  // 사용자 몇명인가
+//
+//        assertThat(countUsers).isEqualTo(2);  // 해당 메모의 현재 사용자가 2명이 맞는가?
+//    }
 
     @Test
     @DisplayName("메모의 사용자들 검색_Test")

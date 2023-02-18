@@ -30,7 +30,7 @@ public class MemoServiceLogic implements MemoService {
 
     @Transactional
     @Override
-    public MemoSaveResponseDto saveMemo(Long userId, MemoSaveRequestDto memoSaveRequestDto) {  // 신규 메모 생성하고 userId와 memo 반환 기능.
+    public MemoSaveResponseDto saveMemo(Long userId, MemoSaveRequestDto memoSaveRequestDto) {  // 신규 메모 생성하고 memo와 userId 반환 기능.
         // 사용자 없이 메모 단독으로는 생성이 불가능하므로 userId도 함께 받아줌.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
 

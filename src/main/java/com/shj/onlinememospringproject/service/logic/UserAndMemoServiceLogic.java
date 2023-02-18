@@ -6,6 +6,7 @@ import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemo;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
+import com.shj.onlinememospringproject.dto.memo.MemoInviteResponseDto;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
@@ -83,29 +84,69 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
                 .collect(Collectors.toList());  // 정렬 완료한 리스트 반환
     }
 
-    // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.
+//    // 추후에, 리액트에서 구현해야할것: 다수의 친구(예로 5명) 초대시, 리액트에서 몇명인지 카운트하여 이 메소드 쿼리를 5번 실행할수있도록 처리하자.
+//    @Transactional
+//    @Override
+//    public List<UserResponseDto> inviteUserToMemo(Long userId, Long memoId) {  // memoId와 userId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
+//        // 초대한 사용자를 포함하여 사용자들의 리스트를 메모 우측에 표기하기위해 List<UserResponseDto> 형식으로 반환받음.
+//
+//        User userEntity = userJpaRepository.findById(userId).orElseThrow(
+//                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
+//        UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
+//        User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
+//
+//        Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
+//                ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
+//        // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
+//
+//        if (userAndMemoJpaRepository.existsByUserAndMemo(userEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
+//            throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
+//        }
+//
+//        UserAndMemoRequestDto userAndMemoRequestDto = new UserAndMemoRequestDto(userSecondEntity, memoEntity);
+//        userAndMemoJpaRepository.save(userAndMemoRequestDto.toEntity());  // UserAndMemo 테이블에 저장.
+//
+//        return findUsersByMemoId(memoId);
+//    }
+
     @Transactional
     @Override
-    public List<UserResponseDto> inviteUserToMemo(Long userId, Long memoId) {  // memoId와 userId를 받아 특정 메모 1개에 친구(사용자) 1명을 메모에 초대하고 모든 공동 사용자들 리스트 반환 기능.
-        // 초대한 사용자를 포함하여 사용자들의 리스트를 메모 우측에 표기하기위해 List<UserResponseDto> 형식으로 반환받음.
+    public MemoInviteResponseDto inviteUsersToMemo(List<UserRequestDto> userRequestDtos, Long memoId) {  // 초대할 사용자들 리스트와 memoId를 받아서 특정 메모 1개에 사용자들을 메모에 초대하고, memo와 모든 공동 사용자들 리스트 반환 기능.
 
-        User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
-        UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
-        User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
+        List<Long> inviteUserIds = userRequestDtos.stream().map(UserRequestDto::getId)
+                .collect(Collectors.toList());
 
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
         // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
-        if (userAndMemoJpaRepository.existsByUserAndMemo(userEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
-            throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
+        List<UserAndMemoRequestDto> userAndMemoRequestDtos = new ArrayList<>();
+
+        for (int i = 0; i < inviteUserIds.size(); i++) {
+            Long userId = inviteUserIds.get(i);
+
+            User userEntity = userJpaRepository.findById(userId).orElseThrow(
+                    ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
+            UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
+            User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
+
+            if (userAndMemoJpaRepository.existsByUserAndMemo(userEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
+                throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
+            }
+
+            userAndMemoRequestDtos.add(new UserAndMemoRequestDto(userSecondEntity, memoEntity));
         }
 
-        UserAndMemoRequestDto userAndMemoRequestDto = new UserAndMemoRequestDto(userSecondEntity, memoEntity);
-        userAndMemoJpaRepository.save(userAndMemoRequestDto.toEntity());  // UserAndMemo 테이블에도 저장.
+        List<UserAndMemo> userAndMemos = userAndMemoRequestDtos.stream().map(UserAndMemoRequestDto::toEntity)
+                        .collect(Collectors.toList());
 
-        return findUsersByMemoId(memoId);
+        userAndMemoJpaRepository.saveAll(userAndMemos);  // UserAndMemo 테이블에 저장. (spring data jpa의 벌크 insert)
+
+        MemoInviteResponseDto memoInviteResponseDto = new MemoInviteResponseDto(memoEntity);
+        memoInviteResponseDto.setUserResponseDtos(findUsersByMemoId(memoId));
+        memoInviteResponseDto.setMemoHasUsersCount(findUsersByMemoId(memoId));
+
+        return memoInviteResponseDto;
     }
 
 

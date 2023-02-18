@@ -1,6 +1,7 @@
 package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.memo.*;
+import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.MemoService;
@@ -21,9 +22,15 @@ public class MemoController {
 
 
     @PostMapping("/users/{userId}/memos")
-    public ResponseEntity saveMemo(@PathVariable Long userId, @RequestBody MemoSaveRequestDto memoSaveRequestDto) {  // 신규 개인메모 생성
+    public ResponseEntity saveMemo(@PathVariable Long userId, @RequestBody MemoSaveRequestDto memoSaveRequestDto) {  // 신규 개인메모 생성 & 해당 메모를 사용하는 사용자 1명의 userId도 함께 조회
         MemoSaveResponseDto memoSaveResponseDto = memoService.saveMemo(userId, memoSaveRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.CREATED_MEMO, memoSaveResponseDto);
+    }
+
+    @PostMapping("/memos/{memoId}")
+    public ResponseEntity inviteMemo(@PathVariable Long memoId, @RequestBody List<UserRequestDto> userRequestDtos) {  // 메모에 사용자들 초대(or 신규 공동메모 생성) & 해당 메모 사용하는 회원들 리스트와 몇명인지도 함께 조회
+        MemoInviteResponseDto memoInviteResponseDto = userAndMemoService.inviteUsersToMemo(userRequestDtos, memoId);
+        return ResponseData.toResponseEntity(ResponseCode.CREATED_MEMO, memoInviteResponseDto);
     }
 
     @GetMapping("/users/{userId}/memos")
