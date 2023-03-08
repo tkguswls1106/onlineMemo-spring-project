@@ -17,6 +17,7 @@ public class MessageItem {
     public static final String UPDATE_MEMO = "SUCCESS - 메모 수정 성공";
     public static final String DELETE_MEMO = "SUCCESS - 메모 삭제 성공";
     public static final String NOT_FOUND_MEMO = "ERROR - 메모를 찾을 수 없습니다.";
+    public static final String BAD_REQUEST_MEMOSORT = "ERROR - 잘못된 메모정렬요청 에러";
 
     public static final String DUPLICATE_USERANDMEMO = "ERROR - 사용자와 메모 관계 중복 에러";
 

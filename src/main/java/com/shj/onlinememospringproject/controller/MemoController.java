@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor  // 이걸로 private final 되어있는걸 자동으로 생성자 만들어줘서 @Autowired와 this 없이 의존관계 DI 주입시켜줌.
@@ -34,7 +35,10 @@ public class MemoController {
     }
 
     @GetMapping("/users/{userId}/memos")
-    public ResponseEntity UserLoadMemos(@PathVariable Long userId) {  // 사용자의 모든 메모들 리스트 조회 & 각 메모 사용하는 회원들 리스트와 몇명인지도 함께 조회
+    public ResponseEntity UserLoadMemos(@PathVariable Long userId,  // 사용자의 모든 메모들 리스트 조회 & 각 메모 사용하는 회원들 리스트와 몇명인지도 함께 조회 + 정렬 및 검색 가능
+                                        @RequestParam(value = "order", required = false) String order,
+                                        @RequestParam(value = "search", required = false) String search) {
+
         List<MemoResponseDto> memoResponseDtos = userAndMemoService.findMemosByUserId(userId);
 
         for (int i = 0; i < memoResponseDtos.size(); i++) {
@@ -46,12 +50,22 @@ public class MemoController {
             );
         }
 
-        return ResponseData.toResponseEntity(ResponseCode.READ_MEMOLIST, memoResponseDtos);
+        List<MemoResponseDto> resultMemoResponseDtos = memoService.sortAndsearch(memoResponseDtos, order, search);
+
+        return ResponseData.toResponseEntity(ResponseCode.READ_MEMOLIST, resultMemoResponseDtos);
     }
 
     @GetMapping("/memos/{memoId}")
     public ResponseEntity findMemoById(@PathVariable Long memoId) {  // 메모정보 조회
         MemoResponseDto memoResponseDto = memoService.findById(memoId);
+
+        memoResponseDto.setUserResponseDtos(
+                userAndMemoService.findUsersByMemoId(memoResponseDto.getId())
+        );
+        memoResponseDto.setMemoHasUsersCount(
+                userAndMemoService.findUsersByMemoId(memoResponseDto.getId())
+        );
+
         return ResponseData.toResponseEntity(ResponseCode.READ_MEMO, memoResponseDto);
     }
 

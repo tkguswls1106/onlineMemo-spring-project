@@ -9,6 +9,7 @@ import com.shj.onlinememospringproject.dto.memo.*;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
+import com.shj.onlinememospringproject.response.exception.MemoSortBadRequestException;
 import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.MemoService;
@@ -16,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor  // 이걸로 private final 되어있는걸 자동으로 생성자 만들어줘서 @Autowired와 this 없이 의존관계 DI 주입시켜줌.
@@ -102,6 +105,48 @@ public class MemoServiceLogic implements MemoService {
             userAndMemoJpaRepository.deleteByUserAndMemo(userEntity, memoEntity);  // 부모 테이블인 Memo보다 먼저, 자식 테이블인 UserAndMemo에서 사용자와 메모와의 관계부터 삭제함.
             memoJpaRepository.deleteById(memoId);  // 그 이후에 부모 테이블인 Memo에서 해당 메모를 삭제함.
         }
+    }
+
+    @Transactional
+    @Override
+    public List<MemoResponseDto> sortAndsearch(List<MemoResponseDto> memoResponseDtos, String order, String search) {  // 메모들 정렬 및 검색 기능.
+
+        List<MemoResponseDto> resultMemoResponseDtos = new ArrayList<>();
+
+        if (order == null && search == null) {  // 전체 메모들 리스트
+            resultMemoResponseDtos = memoResponseDtos;
+        }
+        else if (order != null && search == null) {  // 정렬
+            if (order.equals("all-memo")) {
+                resultMemoResponseDtos = memoResponseDtos;
+            }
+            else if (order.equals("private-memo")) {
+                resultMemoResponseDtos = memoResponseDtos.stream()
+                        .filter(memoResponseDto -> memoResponseDto.getMemoHasUsersCount() == 1)
+                        .collect(Collectors.toList());
+            }
+            else if (order.equals("group-memo")) {
+                resultMemoResponseDtos = memoResponseDtos.stream()
+                        .filter(memoResponseDto -> memoResponseDto.getMemoHasUsersCount() > 1)
+                        .collect(Collectors.toList());
+            }
+            else if (order.equals("star-memo")) {
+                resultMemoResponseDtos = memoResponseDtos.stream()
+                        .filter(memoResponseDto -> memoResponseDto.getIsStar() == 1)
+                        .collect(Collectors.toList());
+            }
+            else {  // 잘못된 정렬 기준을 입력받았을 경우라면
+                throw new MemoSortBadRequestException();  // 잘못된 메모정렬기준 입력 예외처리.
+            }
+        }
+        else if (order == null && search != null) {  // 검색
+            resultMemoResponseDtos = memoResponseDtos.stream()
+                    .filter(memoResponseDto ->
+                            memoResponseDto.getTitle().contains(search) || memoResponseDto.getContent().contains(search))
+                    .collect(Collectors.toList());
+        }
+
+        return resultMemoResponseDtos;
     }
 
 }

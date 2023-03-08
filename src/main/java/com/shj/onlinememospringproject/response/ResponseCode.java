@@ -32,6 +32,7 @@ public enum ResponseCode {
 
     // Memo 관련 실패 응답
     NOT_FOUND_MEMO(StatusItem.NOT_FOUND, MessageItem.NOT_FOUND_MEMO),
+    BAD_REQUEST_MEMOSORT(StatusItem.BAD_REQUEST, MessageItem.BAD_REQUEST_MEMOSORT),
 
     // ===================== //
 

@@ -36,6 +36,12 @@ public class GlobalExceptionHandler {
         return ResponseData.toResponseEntity(ResponseCode.NOT_FOUND_MEMO);
     }
 
+    @ExceptionHandler(MemoSortBadRequestException.class)
+    public ResponseEntity handleMemoSortBadRequestException(MemoSortBadRequestException ex) {
+        log.error("handleMemoSortBadRequestException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.BAD_REQUEST_MEMOSORT);
+    }
+
     @ExceptionHandler(UserAndMemoDuplicateException.class)
     public ResponseEntity handleUserAndMemoDuplicateException(UserAndMemoDuplicateException ex) {
         log.error("handleUserAndMemoDuplicateException", ex);
