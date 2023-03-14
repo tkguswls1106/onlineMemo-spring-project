@@ -21,7 +21,7 @@ public class Memo extends DefaultMemoEntity implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "MEDIUMTEXT default null")
     private String content;
 
 
