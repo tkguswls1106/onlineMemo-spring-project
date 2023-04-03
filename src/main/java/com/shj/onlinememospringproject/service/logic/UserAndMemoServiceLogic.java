@@ -9,6 +9,7 @@ import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaReposito
 import com.shj.onlinememospringproject.dto.memo.MemoInviteResponseDto;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserRequestDtos;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoResponseDto;
@@ -111,9 +112,9 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
 
     @Transactional
     @Override
-    public MemoInviteResponseDto inviteUsersToMemo(List<UserRequestDto> userRequestDtos, Long memoId) {  // 초대할 사용자들 리스트와 memoId를 받아서 특정 메모 1개에 사용자들을 메모에 초대하고, memo와 모든 공동 사용자들 리스트 반환 기능.
+    public MemoInviteResponseDto inviteUsersToMemo(UserRequestDtos userRequestDtos, Long memoId) {  // 초대할 사용자들 리스트와 memoId를 받아서 특정 메모 1개에 사용자들을 메모에 초대하고, memo와 모든 공동 사용자들 리스트 반환 기능.
 
-        List<Long> inviteUserIds = userRequestDtos.stream().map(UserRequestDto::getId)
+        List<Long> inviteUserIds = userRequestDtos.getUserRequestDtos().stream().map(UserRequestDto::getId)
                 .collect(Collectors.toList());
 
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
