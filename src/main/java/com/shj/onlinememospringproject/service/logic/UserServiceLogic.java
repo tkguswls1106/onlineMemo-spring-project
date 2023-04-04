@@ -1,5 +1,6 @@
 package com.shj.onlinememospringproject.service.logic;
 
+import com.shj.onlinememospringproject.domain.friendship.FriendshipJpaRepository;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
@@ -24,6 +25,7 @@ public class UserServiceLogic implements UserService {
 
     private final UserJpaRepository userJpaRepository;
     private final MemoJpaRepository memoJpaRepository;
+    private final FriendshipJpaRepository friendshipJpaRepository;
     private final UserAndMemoJpaRepository userAndMemoJpaRepository;
     private final UserAndMemoServiceLogic userAndMemoServiceLogic;
 
@@ -75,13 +77,13 @@ public class UserServiceLogic implements UserService {
                 .collect(Collectors.toList());  // 사용자와 메모와의 관계를 삭제하기 이전에, 먼저 해당 사용자가 보유한 메모의 memoId 부터 미리 리스트에 담아둠.
 
         userAndMemoJpaRepository.deleteAllByUser(userEntity);  // 부모 테이블인 User보다 먼저, 자식 테이블인 UserAndMemo에서 사용자와 메모와의 관계부터 삭제함.
-        userJpaRepository.delete(userEntity);  // 그 이후에 부모 테이블인 User에서 해당 사용자를 삭제함.
-
         for(int i=0; i < memoIds.size(); i++) {
             if (userAndMemoServiceLogic.findUsersByMemoId(memoIds.get(i)).size() == 0) {  // 사용자와 메모와의 관계 삭제이후, 사용자 삭제이후, 담아두었던 memoId의 메모를 가진 사용자가 총 0명이라면,
                 memoJpaRepository.deleteById(memoIds.get(i));  // 그렇다면 해당 메모도 함께 삭제 조치시킴.
             }
         }
+        friendshipJpaRepository.deleteAllBySenderUserId(userEntity.getId());  // 그 이후에 부모 테이블인 User보다 먼저, 자식 테이블인 Friendship에서 요청사용자와 친구와의 관계부터 삭제함.
+        friendshipJpaRepository.deleteAllByUser(userEntity);  // 그 이후에 부모 테이블인 User보다 먼저, 자식 테이블인 Friendship에서 사용자와 친구와의 관계부터 삭제함.
+        userJpaRepository.delete(userEntity);  // 최종적으로 부모 테이블인 User에서 해당 사용자를 삭제함.
     }
-
 }

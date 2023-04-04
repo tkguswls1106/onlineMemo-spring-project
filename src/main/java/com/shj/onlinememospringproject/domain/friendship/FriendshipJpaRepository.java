@@ -16,6 +16,8 @@ public interface FriendshipJpaRepository extends JpaRepository<Friendship, Long>
     boolean existsByUserAndSenderUserId(User user, Long senderUserId);  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 이미 DB에 존재하는지 반환.
     List<Friendship> findAllByUser(User user);  // 해당 사용자의 모든 친구관계 반환.
     Optional<Friendship> findByUserAndSenderUserId(User user, Long senderUserId);  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터를 반환.
+    void deleteAllBySenderUserId(Long senderUserId);  // 해당 요청사용자에 대한 친구와의 관계 모두 삭제.
+    void deleteAllByUser(User user);  // 해당 사용자에 대한 친구와의 관계 모두 삭제.
 
     @Modifying(clearAutomatically = true)
     @Query(value = "update friendship f set f.is_friend = :friend, f.is_wait = :wait where f.friendship_id = :fid", nativeQuery = true)
