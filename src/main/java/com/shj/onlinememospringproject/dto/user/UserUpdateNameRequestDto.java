@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructorr
 public class UserUpdateNameRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. method로는 post.
     // 사용자 이름 수정 전용의 RequestDto
 
