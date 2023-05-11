@@ -13,12 +13,14 @@ public class UserUpdatePwRequestDto {  // 요청하는 DTO. 예를들어 CRUD의
     private String loginId;
     private String firstPw;
     private String secondPw;
+    private String newFirstPw;
 
     @Builder
-    public UserUpdatePwRequestDto(String loginId, String firstPw, String secondPw) {
+    public UserUpdatePwRequestDto(String loginId, String firstPw, String secondPw, String newFirstPw) {
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;
+        this.newFirstPw = newFirstPw;
     }
 
     // 클라이언트에게 받아왔고 계층간 이동에 사용되는 dto를 DB에 접근할수있는 entity로 변환 용도
@@ -26,7 +28,7 @@ public class UserUpdatePwRequestDto {  // 요청하는 DTO. 예를들어 CRUD의
         return User.UserUpdatePwBuilder()
                 .loginId(loginId)
                 .firstPw(firstPw)
-                .secondPw(secondPw)
+                .secondPw(newFirstPw)
                 .build();
     }
 }
