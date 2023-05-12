@@ -27,8 +27,8 @@ public class UserUpdatePwRequestDto {  // 요청하는 DTO. 예를들어 CRUD의
     public User toEntity() {
         return User.UserUpdatePwBuilder()
                 .loginId(loginId)
-                .firstPw(firstPw)
-                .secondPw(newFirstPw)
+                .firstPw(newFirstPw)
+                .secondPw(secondPw)
                 .build();
     }
 }
