@@ -22,9 +22,6 @@ public class User implements Serializable {
     @Column(name = "first_password")
     private String firstPw;
 
-    @Column(name = "second_password")
-    private String secondPw;
-
     @Column(name = "username")
     private String username;
 
@@ -40,21 +37,19 @@ public class User implements Serializable {
     }
 
     @Builder(builderClassName = "UserJoinBuilder", builderMethodName = "UserJoinBuilder")
-    public User(String loginId, String firstPw, String secondPw, String username, Authority authority) {
+    public User(String loginId, String firstPw, String username, Authority authority) {
         // 이 빌더는 사용자 회원가입때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = firstPw;
-        this.secondPw = secondPw;
         this.username = username;
         this.authority = authority;
     }
 
     @Builder(builderClassName = "UserUpdatePwBuilder", builderMethodName = "UserUpdatePwBuilder")
-    public User(String loginId, String newFirstPw, String secondPw) {
+    public User(String loginId, String newFirstPw) {
         // 이 빌더는 사용자 1차비밀번호 수정때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = newFirstPw;
-        this.secondPw = secondPw;
     }
 
     @Builder(builderClassName = "UserUpdateNameBuilder", builderMethodName = "UserUpdateNameBuilder")

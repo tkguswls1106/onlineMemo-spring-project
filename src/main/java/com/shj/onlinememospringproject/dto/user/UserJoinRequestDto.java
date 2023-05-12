@@ -13,14 +13,12 @@ public class UserJoinRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. 
 
     private String loginId;
     private String firstPw;
-    private String secondPw;
     private String username;
 
     @Builder
-    public UserJoinRequestDto(String loginId, String firstPw, String secondPw, String username) {
+    public UserJoinRequestDto(String loginId, String firstPw, String username) {
         this.loginId = loginId;
         this.firstPw = firstPw;
-        this.secondPw = secondPw;
         this.username = username;
     }
 
@@ -29,7 +27,6 @@ public class UserJoinRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. 
         return User.UserJoinBuilder()
                 .loginId(loginId)
                 .firstPw(firstPw)
-                .secondPw(secondPw)
                 .username(username)
                 .authority(Authority.ROLE_USER)
                 .build();
