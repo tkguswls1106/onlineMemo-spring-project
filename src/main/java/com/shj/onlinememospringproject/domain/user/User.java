@@ -28,6 +28,9 @@ public class User implements Serializable {
     @Column(name = "username")
     private String username;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
 
     @Builder
     public User(Long id, String loginId, String username) {
@@ -37,12 +40,13 @@ public class User implements Serializable {
     }
 
     @Builder(builderClassName = "UserJoinBuilder", builderMethodName = "UserJoinBuilder")
-    public User(String loginId, String firstPw, String secondPw, String username) {
+    public User(String loginId, String firstPw, String secondPw, String username, Authority authority) {
         // 이 빌더는 사용자 회원가입때만 사용할 용도
         this.loginId = loginId;
         this.firstPw = firstPw;
         this.secondPw = secondPw;
         this.username = username;
+        this.authority = authority;
     }
 
     @Builder(builderClassName = "UserUpdatePwBuilder", builderMethodName = "UserUpdatePwBuilder")

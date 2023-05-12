@@ -1,5 +1,6 @@
 package com.shj.onlinememospringproject.dto.user;
 
+import com.shj.onlinememospringproject.domain.user.Authority;
 import com.shj.onlinememospringproject.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class UserJoinRequestDto {  // 요청하는 DTO. 예를들어 CRUD의 C. 
                 .firstPw(firstPw)
                 .secondPw(secondPw)
                 .username(username)
+                .authority(Authority.ROLE_USER)
                 .build();
     }
 }
