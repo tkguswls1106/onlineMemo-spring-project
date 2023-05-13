@@ -13,12 +13,10 @@ import com.shj.onlinememospringproject.dto.user.UserRequestDtos;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoResponseDto;
-import com.shj.onlinememospringproject.response.exception.NoLoginException;
 import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.response.exception.UserAndMemoDuplicateException;
 import com.shj.onlinememospringproject.service.UserAndMemoService;
-import com.shj.onlinememospringproject.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,20 +35,10 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     private final UserAndMemoJpaRepository userAndMemoJpaRepository;
 
 
-    public void checkLogin() {  // 로그인 상태 여부 확인 메소드이다.
-        Long userId = SecurityUtil.getCurrentMemberId();
-        if (userId == null) {  // 로그인되어있는 상태가 아닐경우
-            throw new NoLoginException();
-        }
-    }
-
-
     @Transactional(readOnly = true)
     @Override
     public List<MemoResponseDto> findMemosByUserId(Long userId) {  // userId와 일치하는 사용자의 메모들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
@@ -77,8 +65,6 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     public List<UserResponseDto> findUsersByMemoId(Long memoId) {  // memoId와 일치하는 메모의 사용자들 리스트를 정렬후 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
-        checkLogin();  // 로그인 상태 여부 확인.
-
         memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());  // 우선 해당 memoId와 일치하는 메모가 존재하는지부터 확인.
 
@@ -102,8 +88,6 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     @Transactional
     @Override
     public MemoInviteResponseDto inviteUsersToMemo(UserRequestDtos userRequestDtos, Long memoId) {  // 초대할 사용자들 리스트와 memoId를 받아서 특정 메모 1개에 사용자들을 메모에 초대하고, memo와 모든 공동 사용자들 리스트 반환 기능.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         List<Long> inviteUserIds = userRequestDtos.getUserRequestDtos().stream().map(UserRequestDto::getId)
                 .collect(Collectors.toList());
@@ -147,8 +131,6 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
     @Override
     @Transactional
     public List<UserAndMemoResponseDto> findAllUserAndMemo(Long userId, Long memoId) {  // 사용자와 메모의 관계 상황을 반환 기능.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기

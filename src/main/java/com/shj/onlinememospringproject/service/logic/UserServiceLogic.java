@@ -1,6 +1,5 @@
 package com.shj.onlinememospringproject.service.logic;
 
-import com.shj.onlinememospringproject.response.exception.NoLoginException;
 import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.domain.friendship.FriendshipJpaRepository;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
@@ -33,17 +32,20 @@ public class UserServiceLogic implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public void checkLogin() {  // 로그인 상태 여부 확인 메소드이다.
-        Long userId = SecurityUtil.getCurrentMemberId();
-        if (userId == null) {  // 로그인되어있는 상태가 아닐경우
-            throw new NoLoginException();
-        }
-    }
-
     public UserResponseDto getMyInfoBySecurity() {  // 헤더에 있는 token값을 토대로 User의 data를 건내주는 메소드이다.
         return userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
                 .map(UserResponseDto::new)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+    }
+
+    public void checkTokenUser(Long userId) {  // 헤더에 있는 token값을 토대로 Security Context 내의 User의 id와 path의 id가 일치하는지 확인하는 메소드이다.
+        UserResponseDto securityUser = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
+                .map(UserResponseDto::new)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+
+        if (securityUser.getId() != userId) {
+            throw new RuntimeException("SecurityContext의 사용자id와 path의 사용자id 불일치 에러");
+        }
     }
 
 
@@ -51,8 +53,6 @@ public class UserServiceLogic implements UserService {
     @Override
     public UserResponseDto findById(Long userId) {  // userId로 검색한 사용자 1명 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User entity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
@@ -63,8 +63,6 @@ public class UserServiceLogic implements UserService {
     @Override
     public void updateName(Long userId, UserUpdateNameRequestDto userUpdateNameRequestDto) {  // 해당 userId 사용자의 이름 수정 기능.
 
-        checkLogin();  // 로그인 상태 여부 확인.
-
         User entity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
 
@@ -74,8 +72,6 @@ public class UserServiceLogic implements UserService {
     @Transactional
     @Override
     public void updatePw(UserUpdatePwRequestDto userUpdatePwRequestDto) {
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User entity = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
@@ -90,8 +86,6 @@ public class UserServiceLogic implements UserService {
     @Transactional
     @Override
     public void deleteUser(Long userId) {  // 해당 userId의 사용자 삭제 기능. 동시에 해당 사용자의 단독 메모도 함께 삭제함.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());

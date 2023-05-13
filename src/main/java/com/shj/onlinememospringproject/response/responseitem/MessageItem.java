@@ -4,6 +4,9 @@ public class MessageItem {
     public static final String LOGIN_SUCCESS = "SUCCESS - 로그인 성공";
     public static final String LOGIN_FAIL = "ERROR - 로그인 실패";
 
+    public static final String UNAUTHORIZED = "ERROR - Unauthorized 에러";
+    public static final String FORBIDDEN = "ERROR - Forbidden 에러";
+
     public static final String CREATED_USER = "SUCCESS - 회원 가입 성공";
     public static final String READ_USER = "SUCCESS - 회원 정보 조회 성공";
     public static final String UPDATE_USER = "SUCCESS - 회원 정보 수정 성공";

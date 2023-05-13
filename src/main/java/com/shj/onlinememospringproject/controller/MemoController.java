@@ -3,10 +3,12 @@ package com.shj.onlinememospringproject.controller;
 import com.shj.onlinememospringproject.dto.memo.*;
 import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDtos;
+import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.MemoService;
 import com.shj.onlinememospringproject.service.UserAndMemoService;
+import com.shj.onlinememospringproject.service.logic.UserServiceLogic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ public class MemoController {
 
     private final MemoService memoService;
     private final UserAndMemoService userAndMemoService;
+    private final UserServiceLogic userServiceLogic;
 
 
     @PostMapping("/users/{userId}/memos")
@@ -39,6 +42,8 @@ public class MemoController {
     public ResponseEntity UserLoadMemos(@PathVariable Long userId,  // 사용자의 모든 메모들 리스트 조회 & 각 메모 사용하는 회원들 리스트와 몇명인지도 함께 조회 + 정렬 및 검색 가능
                                         @RequestParam(value = "order", required = false) String order,
                                         @RequestParam(value = "search", required = false) String search) {
+
+        userServiceLogic.checkTokenUser(userId);
 
         List<MemoResponseDto> memoResponseDtos = userAndMemoService.findMemosByUserId(userId);
 
@@ -84,6 +89,8 @@ public class MemoController {
 
     @DeleteMapping("/users/{userId}/memos/{memoId}")
     public ResponseEntity deleteMemo(@PathVariable Long userId, @PathVariable Long memoId) {  // 메모 삭제. 만약 개인메모가 아닐 경우에는 메모를 삭제하지 않고 메모그룹 탈퇴로 처리함.
+        userServiceLogic.checkTokenUser(userId);
+
         memoService.deleteMemo(userId, memoId);
         return ResponseData.toResponseEntity(ResponseCode.DELETE_MEMO);
         // !!! 나중에 이거 메모 삭제 성공시, 사용자의 전체 메모리스트가 보이는 메인화면으로 리다이렉트 시키도록 변경시킬것. !!!

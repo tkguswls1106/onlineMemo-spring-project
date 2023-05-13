@@ -1,7 +1,7 @@
 package com.shj.onlinememospringproject.controller;
 
-import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.dto.token.TokenDto;
+import com.shj.onlinememospringproject.dto.user.UserIdResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserLoginRequestDto;
 import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
@@ -18,16 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserJpaRepository userJpaRepository;
 
 
     @GetMapping("/auth")
     public ResponseEntity isLogin() {
-        UserResponseDto userResponseDto = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
-                .map(UserResponseDto::new)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+        Long userId = SecurityUtil.getCurrentMemberId();
+        UserIdResponseDto userIdResponseDto = new UserIdResponseDto(userId);
 
-        return ResponseData.toResponseEntity(ResponseCode.READ_IS_LOGIN, userResponseDto);
+        return ResponseData.toResponseEntity(ResponseCode.READ_IS_LOGIN, userIdResponseDto);
     }
 
     @PostMapping("/signup")

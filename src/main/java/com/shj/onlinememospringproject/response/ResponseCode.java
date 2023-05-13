@@ -63,7 +63,8 @@ public enum ResponseCode {
 
     // 기타 실패 응답
     INTERNAL_SERVER_ERROR(StatusItem.INTERNAL_SERVER_ERROR, MessageItem.INTERNAL_SERVER_ERROR),
-    //LOGIN_FAIL(StatusItem.UNAUTHORIZED, MessageItem.LOGIN_FAIL),
+    UNAUTHORIZED_ERROR(StatusItem.UNAUTHORIZED, MessageItem.UNAUTHORIZED),
+    FORBIDDEN_ERROR(StatusItem.FORBIDDEN, MessageItem.FORBIDDEN),
 
     // ===================== //
     ;

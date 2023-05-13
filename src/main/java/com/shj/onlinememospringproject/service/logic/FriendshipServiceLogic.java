@@ -27,19 +27,9 @@ public class FriendshipServiceLogic implements FriendshipService {
     private final UserJpaRepository userJpaRepository;
 
 
-    public void checkLogin() {  // 로그인 상태 여부 확인 메소드이다.
-        Long userId = SecurityUtil.getCurrentMemberId();
-        if (userId == null) {  // 로그인되어있는 상태가 아닐경우
-            throw new NoLoginException();
-        }
-    }
-
-
     @Transactional
     @Override
     public FriendshipSendResponseDto sendFriendship(Long senderUserId, FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
                 ()->new NoSuchUserException());  // senderUserId에 해당되는 사용자가 존재하는지 여부 확인. 굳이 리턴받아 값을 할당한 이유는 요청 반대의 경우도 확인해야하기에 적었다.
@@ -71,8 +61,6 @@ public class FriendshipServiceLogic implements FriendshipService {
     @Override
     public List<UserResponseDto> findSendersByUserId(Long userId) {  // 해당 userId 사용자의 친구요청 응답대기중인 요청발신자 사용자들 리스트 반환 기능.
 
-        checkLogin();  // 로그인 상태 여부 확인.
-
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
@@ -101,8 +89,6 @@ public class FriendshipServiceLogic implements FriendshipService {
     @Override
     public List<UserResponseDto> findFriendsByUserId(Long userId) {  // 해당 userId 사용자의 친구들 리스트 반환 기능.
 
-        checkLogin();  // 로그인 상태 여부 확인.
-
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
@@ -130,8 +116,6 @@ public class FriendshipServiceLogic implements FriendshipService {
     @Transactional
     @Override
     public void updateFriendship(Long userId, Long senderUserId, FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 친구요청 수신자는 userId, 발신자는 senderUserId에 해당되는 요청 친구에 대한 친구 맺기 여부 수정 기능.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
@@ -169,8 +153,6 @@ public class FriendshipServiceLogic implements FriendshipService {
     @Transactional
     @Override
     public void deleteFriendship(Long userId, Long senderUserId) {  // 해당 userId 사용자의 친구들중에서 해당 senderUserId의 사용자를 친구 목록에서 삭제 기능.
-
-        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.

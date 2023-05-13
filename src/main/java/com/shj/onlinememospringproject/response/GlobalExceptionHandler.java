@@ -5,6 +5,8 @@ import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.response.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,10 +20,20 @@ public class GlobalExceptionHandler {
         return ResponseData.toResponseEntity(ResponseCode.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(NoLoginException.class)
-    public String handleNoLoginException() {
-        log.info("로그인을 해주세요.");
-        return "redirect:/login";
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity handleUnauthorizedException(Exception ex) {
+        log.error("handleUnauthorizedException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.UNAUTHORIZED_ERROR);
+        // 사실 이건 의미가 없는게, 예외처리권한이 JwtAuthenticationEntryPoint 에게 넘어가기에 크롬콘솔에선 설정한방식대로 출력되지않는다.
+        // 하지만 이는 postman 프로그램 에서 출력받아 확인할 수 있다.
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity handleForbiddenException(Exception ex) {
+        log.error("handleForbiddenException", ex);
+        return ResponseData.toResponseEntity(ResponseCode.FORBIDDEN_ERROR);
+        // 사실 이건 의미가 없는게, 예외처리권한이 JwtAccessDeniedHandler 에게 넘어가기에 크롬콘솔에선 설정한방식대로 출력되지않는다.
+        // 하지만 이는 postman 프로그램 에서 출력받아 확인할 수 있다.
     }
 
     @ExceptionHandler(LoginIdDuplicateException.class)
