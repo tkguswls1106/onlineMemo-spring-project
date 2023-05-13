@@ -3,7 +3,7 @@ package com.shj.onlinememospringproject.service;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.user.UserSignRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserSignupRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.service.auth.AuthService;
 import com.shj.onlinememospringproject.service.logic.MemoServiceLogic;
@@ -47,19 +47,19 @@ public class UserServiceTest {
         //String secondPw = "2차비번입력함";
         String username = "사용자이름입력함";
 
-        UserSignRequestDto userSignRequestDto = UserSignRequestDto.builder()
+        UserSignupRequestDto userSignupRequestDto = UserSignupRequestDto.builder()
                 .firstPw(firstPw)
                 .loginId(loginId)
                 //.secondPw(secondPw)
                 .username(username)
                 .build();
 
-//        assertThat(userSignRequestDto.getFirstPw()).isEqualTo("1차비번입력함");
-//        assertThat(userSignRequestDto.getLoginId()).isEqualTo("로그인아이디입력함");
-//        assertThat(userSignRequestDto.getSecondPw()).isEqualTo("2차비번입력함");
-//        assertThat(userSignRequestDto.getUsername()).isEqualTo("사용자이름입력함");
-        //userServiceLogic.save(userSignRequestDto);
-        authService.signup(userSignRequestDto);
+//        assertThat(userSignupRequestDto.getFirstPw()).isEqualTo("1차비번입력함");
+//        assertThat(userSignupRequestDto.getLoginId()).isEqualTo("로그인아이디입력함");
+//        assertThat(userSignupRequestDto.getSecondPw()).isEqualTo("2차비번입력함");
+//        assertThat(userSignupRequestDto.getUsername()).isEqualTo("사용자이름입력함");
+        //userServiceLogic.save(userSignupRequestDto);
+        authService.signup(userSignupRequestDto);
     }
 
     @Test

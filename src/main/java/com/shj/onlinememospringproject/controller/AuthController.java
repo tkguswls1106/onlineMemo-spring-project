@@ -2,9 +2,10 @@ package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.dto.token.TokenDto;
+import com.shj.onlinememospringproject.dto.user.UserLoginRequestDto;
 import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
-import com.shj.onlinememospringproject.dto.user.UserSignRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserSignupRequestDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.auth.AuthService;
@@ -30,14 +31,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity joinUser(@RequestBody UserSignRequestDto userSignRequestDto) {  // 회원가입
-        UserResponseDto userResponseDto = authService.signup(userSignRequestDto);
+    public ResponseEntity joinUser(@RequestBody UserSignupRequestDto userSignupRequestDto) {  // 회원가입
+        UserResponseDto userResponseDto = authService.signup(userSignupRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.CREATED_USER, userResponseDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserSignRequestDto userSignRequestDto) {  // 로그인
-        TokenDto tokenDto = authService.login(userSignRequestDto);
+    public ResponseEntity login(@RequestBody UserLoginRequestDto userLoginRequestDto) {  // 로그인
+        TokenDto tokenDto = authService.login(userLoginRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.LOGIN_SUCCESS, tokenDto);
     }
 }

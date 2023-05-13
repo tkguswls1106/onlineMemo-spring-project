@@ -3,7 +3,8 @@ package com.shj.onlinememospringproject.service.auth;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.dto.token.TokenDto;
-import com.shj.onlinememospringproject.dto.user.UserSignRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserLoginRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserSignupRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.jwt.TokenProvider;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
@@ -26,23 +27,23 @@ public class AuthService {
 
 
     @Transactional
-    public UserResponseDto signup(UserSignRequestDto userSignRequestDto) {  // 신규 사용자 생성하고 user 반환 기능.
+    public UserResponseDto signup(UserSignupRequestDto userSignupRequestDto) {  // 신규 사용자 생성하고 user 반환 기능.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
 
-        String newLoginId = userSignRequestDto.getLoginId();
+        String newLoginId = userSignupRequestDto.getLoginId();
         userJpaRepository.findByLoginId(newLoginId)
                 .ifPresent(user -> {  // 해당 로그인아이디의 사용자가 이미 존재한다면,
                     throw new LoginIdDuplicateException();  // 회원가입 로그인아이디 중복 예외처리.
                 });
 
-        User entity = userJpaRepository.save(userSignRequestDto.toEntity(passwordEncoder));
+        User entity = userJpaRepository.save(userSignupRequestDto.toEntity(passwordEncoder));
         return new UserResponseDto(entity);
     }
 
     @Transactional
-    public TokenDto login(UserSignRequestDto userSignRequestDto) {
+    public TokenDto login(UserLoginRequestDto userLoginRequestDto) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = userSignRequestDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = userLoginRequestDto.toAuthentication();
 
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
