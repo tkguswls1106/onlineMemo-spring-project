@@ -1,18 +1,20 @@
 package com.shj.onlinememospringproject.service.logic;
 
+import com.shj.onlinememospringproject.response.exception.NoLoginException;
+import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.domain.friendship.FriendshipJpaRepository;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.User;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
 import com.shj.onlinememospringproject.dto.memo.MemoResponseDto;
-import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
-import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
+import com.shj.onlinememospringproject.dto.user.UserUpdatePwRequestDto;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,27 +30,29 @@ public class UserServiceLogic implements UserService {
     private final FriendshipJpaRepository friendshipJpaRepository;
     private final UserAndMemoJpaRepository userAndMemoJpaRepository;
     private final UserAndMemoServiceLogic userAndMemoServiceLogic;
+    private final PasswordEncoder passwordEncoder;
 
 
-    @Transactional
-    @Override
-    public UserResponseDto save(UserJoinRequestDto userJoinRequestDto) {  // 신규 사용자 생성하고 user 반환 기능.
-        // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
-
-        String newLoginId = userJoinRequestDto.getLoginId();
-        userJpaRepository.findByLoginId(newLoginId)
-                .ifPresent(user -> {  // 해당 로그인아이디의 사용자가 이미 존재한다면,
-                    throw new LoginIdDuplicateException();  // 회원가입 로그인아이디 중복 예외처리.
-                });
-
-        User entity = userJpaRepository.save(userJoinRequestDto.toEntity());
-        return new UserResponseDto(entity);
+    public void checkLogin() {  // 로그인 상태 여부 확인 메소드이다.
+        Long userId = SecurityUtil.getCurrentMemberId();
+        if (userId == null) {  // 로그인되어있는 상태가 아닐경우
+            throw new NoLoginException();
+        }
     }
+
+    public UserResponseDto getMyInfoBySecurity() {  // 헤더에 있는 token값을 토대로 User의 data를 건내주는 메소드이다.
+        return userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
+                .map(UserResponseDto::new)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+    }
+
 
     @Transactional(readOnly = true)
     @Override
     public UserResponseDto findById(Long userId) {  // userId로 검색한 사용자 1명 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         User entity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
@@ -59,6 +63,8 @@ public class UserServiceLogic implements UserService {
     @Override
     public void updateName(Long userId, UserUpdateNameRequestDto userUpdateNameRequestDto) {  // 해당 userId 사용자의 이름 수정 기능.
 
+        checkLogin();  // 로그인 상태 여부 확인.
+
         User entity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
 
@@ -67,7 +73,25 @@ public class UserServiceLogic implements UserService {
 
     @Transactional
     @Override
+    public void updatePw(UserUpdatePwRequestDto userUpdatePwRequestDto) {
+
+        checkLogin();  // 로그인 상태 여부 확인.
+
+        User entity = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+
+        if (!passwordEncoder.matches(userUpdatePwRequestDto.getFirstPw(), entity.getFirstPw())) {
+            throw new RuntimeException("비밀번호가 맞지 않습니다.");
+        }
+
+        entity.updateFirstPw(passwordEncoder.encode(userUpdatePwRequestDto.getNewFirstPw()));
+    }
+
+    @Transactional
+    @Override
     public void deleteUser(Long userId) {  // 해당 userId의 사용자 삭제 기능. 동시에 해당 사용자의 단독 메모도 함께 삭제함.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());

@@ -18,6 +18,12 @@ public class GlobalExceptionHandler {
         return ResponseData.toResponseEntity(ResponseCode.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(NoLoginException.class)
+    public String handleNoLoginException() {
+        log.info("로그인을 해주세요.");
+        return "redirect:/login";
+    }
+
     @ExceptionHandler(LoginIdDuplicateException.class)
     public ResponseEntity handleLoginIdDuplicateException(LoginIdDuplicateException ex) {
         log.error("handleLoginIdDuplicateException", ex);

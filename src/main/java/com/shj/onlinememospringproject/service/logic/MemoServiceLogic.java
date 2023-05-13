@@ -10,9 +10,11 @@ import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
 import com.shj.onlinememospringproject.response.exception.MemoSortBadRequestException;
+import com.shj.onlinememospringproject.response.exception.NoLoginException;
 import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.service.MemoService;
+import com.shj.onlinememospringproject.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +33,21 @@ public class MemoServiceLogic implements MemoService {
     private final UserAndMemoServiceLogic userAndMemoServiceLogic;
 
 
+    public void checkLogin() {  // 로그인 상태 여부 확인 메소드이다.
+        Long userId = SecurityUtil.getCurrentMemberId();
+        if (userId == null) {  // 로그인되어있는 상태가 아닐경우
+            throw new NoLoginException();
+        }
+    }
+
+
     @Transactional
     @Override
     public MemoSaveResponseDto saveMemo(Long userId, MemoSaveRequestDto memoSaveRequestDto) {  // 신규 메모 생성하고 memo와 userId 반환 기능.
         // 사용자 없이 메모 단독으로는 생성이 불가능하므로 userId도 함께 받아줌.
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
@@ -55,6 +67,8 @@ public class MemoServiceLogic implements MemoService {
     public MemoResponseDto findById(Long memoId) {  // memoId로 검색한 메모 1개 반환 기능.
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
+        checkLogin();  // 로그인 상태 여부 확인.
+
         Memo entity = memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());
 
@@ -64,6 +78,8 @@ public class MemoServiceLogic implements MemoService {
     @Transactional
     @Override
     public void updateMemo(Long memoId, MemoUpdateRequestDto memoUpdateRequestDto) {  // 해당 memoId의 메모 수정 기능.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         Memo entity = memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());
@@ -75,6 +91,8 @@ public class MemoServiceLogic implements MemoService {
     @Override
     public void updateIsStar(Long memoId, MemoUpdateStarRequestDto memoUpdateStarRequestDto) {  // 해당 memoId의 즐겨찾기 여부 수정 기능.
 
+        checkLogin();  // 로그인 상태 여부 확인.
+
         memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());
 
@@ -84,6 +102,8 @@ public class MemoServiceLogic implements MemoService {
     @Transactional
     @Override
     public void deleteMemo(Long userId, Long memoId) {  // 해당 memoId의 메모 삭제 기능. 만약 개인메모가 아닐 경우에는 메모를 삭제하지 않고 메모그룹 탈퇴로 처리함.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());
@@ -110,6 +130,8 @@ public class MemoServiceLogic implements MemoService {
     @Transactional
     @Override
     public List<MemoResponseDto> sortAndsearch(List<MemoResponseDto> memoResponseDtos, String order, String search) {  // 메모들 정렬 및 검색 기능.
+
+        checkLogin();  // 로그인 상태 여부 확인.
 
         List<MemoResponseDto> resultMemoResponseDtos = new ArrayList<>();
 

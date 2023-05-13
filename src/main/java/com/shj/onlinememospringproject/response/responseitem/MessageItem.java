@@ -30,6 +30,7 @@ public class MessageItem {
     public static final String DUPLICATE_FRIENDSHIP = "ERROR - 친구요청 중복 에러";
     public static final String BAD_REQUEST_FRIENDSHIP = "ERROR - 잘못된 친구요청 에러";
 
+    public static final String READ_IS_LOGIN = "현재 로그인 여부 조회 성공";
     public static final String INTERNAL_SERVER_ERROR = "ERROR - 서버 내부 에러";
     public static final String DB_ERROR = "ERROR - 데이터베이스 에러";
 }

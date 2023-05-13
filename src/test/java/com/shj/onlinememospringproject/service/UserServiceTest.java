@@ -3,8 +3,9 @@ package com.shj.onlinememospringproject.service;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.user.UserJoinRequestDto;
+import com.shj.onlinememospringproject.dto.user.UserSignRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
+import com.shj.onlinememospringproject.service.auth.AuthService;
 import com.shj.onlinememospringproject.service.logic.MemoServiceLogic;
 import com.shj.onlinememospringproject.service.logic.UserAndMemoServiceLogic;
 import com.shj.onlinememospringproject.service.logic.UserServiceLogic;
@@ -33,6 +34,8 @@ public class UserServiceTest {
     MemoServiceLogic memoServiceLogic;
     @Autowired
     UserAndMemoServiceLogic userAndMemoServiceLogic;
+    @Autowired
+    AuthService authService;
 
 
     @Test
@@ -41,21 +44,22 @@ public class UserServiceTest {
     void userSave_Test() {  // 신규 사용자 생성하고 userId 반환 기능.
         String firstPw = "1차비번입력함";
         String loginId = "로그인아이디입력함";
-        String secondPw = "2차비번입력함";
+        //String secondPw = "2차비번입력함";
         String username = "사용자이름입력함";
 
-        UserJoinRequestDto userJoinRequestDto = UserJoinRequestDto.builder()
+        UserSignRequestDto userSignRequestDto = UserSignRequestDto.builder()
                 .firstPw(firstPw)
                 .loginId(loginId)
-                .secondPw(secondPw)
+                //.secondPw(secondPw)
                 .username(username)
                 .build();
 
-//        assertThat(userJoinRequestDto.getFirstPw()).isEqualTo("1차비번입력함");
-//        assertThat(userJoinRequestDto.getLoginId()).isEqualTo("로그인아이디입력함");
-//        assertThat(userJoinRequestDto.getSecondPw()).isEqualTo("2차비번입력함");
-//        assertThat(userJoinRequestDto.getUsername()).isEqualTo("사용자이름입력함");
-        userServiceLogic.save(userJoinRequestDto);
+//        assertThat(userSignRequestDto.getFirstPw()).isEqualTo("1차비번입력함");
+//        assertThat(userSignRequestDto.getLoginId()).isEqualTo("로그인아이디입력함");
+//        assertThat(userSignRequestDto.getSecondPw()).isEqualTo("2차비번입력함");
+//        assertThat(userSignRequestDto.getUsername()).isEqualTo("사용자이름입력함");
+        //userServiceLogic.save(userSignRequestDto);
+        authService.signup(userSignRequestDto);
     }
 
     @Test
