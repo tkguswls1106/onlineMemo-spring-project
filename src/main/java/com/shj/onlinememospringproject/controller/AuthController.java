@@ -21,7 +21,7 @@ public class AuthController {
 
 
     @GetMapping("/auth")
-    public ResponseEntity isLogin() {
+    public ResponseEntity isLogin() {  // 로그인 상태 여부 확인
         Long userId = SecurityUtil.getCurrentMemberId();
         UserIdResponseDto userIdResponseDto = new UserIdResponseDto(userId);
 
