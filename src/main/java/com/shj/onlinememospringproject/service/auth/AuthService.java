@@ -6,8 +6,11 @@ import com.shj.onlinememospringproject.dto.token.TokenDto;
 import com.shj.onlinememospringproject.dto.user.UserLoginRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserSignupRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
+import com.shj.onlinememospringproject.dto.user.UserUpdatePwRequestDto;
 import com.shj.onlinememospringproject.jwt.TokenProvider;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
+import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
+import com.shj.onlinememospringproject.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -41,12 +44,27 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto login(UserLoginRequestDto userLoginRequestDto) {
+    public TokenDto login(UserLoginRequestDto userLoginRequestDto) {  // 로그인 기능.
 
         UsernamePasswordAuthenticationToken authenticationToken = userLoginRequestDto.toAuthentication();
 
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+        // 여기서 실제로 검증이 이루어진다.
 
         return tokenProvider.generateTokenDto(authentication);
+    }
+
+    @Transactional
+    public void updatePw(UserUpdatePwRequestDto userUpdatePwRequestDto) {  // 사용자의 비밀번호 수정 기능.
+
+        UserLoginRequestDto userLoginRequestDto = new UserLoginRequestDto(userUpdatePwRequestDto.getLoginId(), userUpdatePwRequestDto.getFirstPw());
+        UsernamePasswordAuthenticationToken authenticationToken = userLoginRequestDto.toAuthentication();
+        managerBuilder.getObject().authenticate(authenticationToken);
+        // 여기서 로그인이 가능한지 실제로 검증이 이루어진다.
+
+        User entity = userJpaRepository.findByLoginId(userUpdatePwRequestDto.getLoginId()).orElseThrow(
+                ()->new NoSuchUserException());
+
+        entity.updateFirstPw(passwordEncoder.encode(userUpdatePwRequestDto.getNewFirstPw()));
     }
 }

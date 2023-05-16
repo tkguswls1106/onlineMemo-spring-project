@@ -1,11 +1,8 @@
 package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.token.TokenDto;
-import com.shj.onlinememospringproject.dto.user.UserIdResponseDto;
-import com.shj.onlinememospringproject.dto.user.UserLoginRequestDto;
+import com.shj.onlinememospringproject.dto.user.*;
 import com.shj.onlinememospringproject.util.SecurityUtil;
-import com.shj.onlinememospringproject.dto.user.UserResponseDto;
-import com.shj.onlinememospringproject.dto.user.UserSignupRequestDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.auth.AuthService;
@@ -38,5 +35,11 @@ public class AuthController {
     public ResponseEntity login(@RequestBody UserLoginRequestDto userLoginRequestDto) {  // 로그인
         TokenDto tokenDto = authService.login(userLoginRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.LOGIN_SUCCESS, tokenDto);
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity updatePassword(@RequestBody UserUpdatePwRequestDto userUpdatePwRequestDto) {  // 비밀번호 수정
+        authService.updatePw(userUpdatePwRequestDto);
+        return ResponseData.toResponseEntity(ResponseCode.UPDATE_PASSWORD);
     }
 }

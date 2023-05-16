@@ -71,20 +71,6 @@ public class UserServiceLogic implements UserService {
 
     @Transactional
     @Override
-    public void updatePw(UserUpdatePwRequestDto userUpdatePwRequestDto) {
-
-        User entity = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
-
-        if (!passwordEncoder.matches(userUpdatePwRequestDto.getFirstPw(), entity.getFirstPw())) {
-            throw new RuntimeException("비밀번호가 맞지 않습니다.");
-        }
-
-        entity.updateFirstPw(passwordEncoder.encode(userUpdatePwRequestDto.getNewFirstPw()));
-    }
-
-    @Transactional
-    @Override
     public void deleteUser(Long userId) {  // 해당 userId의 사용자 삭제 기능. 동시에 해당 사용자의 단독 메모도 함께 삭제함.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
