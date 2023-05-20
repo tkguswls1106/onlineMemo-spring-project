@@ -2,7 +2,6 @@ package com.shj.onlinememospringproject.response.responseitem;
 
 public class MessageItem {
     public static final String LOGIN_SUCCESS = "SUCCESS - 로그인 성공";
-    public static final String LOGIN_FAIL = "ERROR - 로그인 실패";
     public static final String UPDATE_PASSWORD = "SUCCESS - 비밀번호 수정 성공";
 
     public static final String UNAUTHORIZED = "ERROR - Unauthorized 에러";
@@ -36,5 +35,4 @@ public class MessageItem {
 
     public static final String READ_IS_LOGIN = "현재 로그인 여부 조회 성공";
     public static final String INTERNAL_SERVER_ERROR = "ERROR - 서버 내부 에러";
-    public static final String DB_ERROR = "ERROR - 데이터베이스 에러";
 }
