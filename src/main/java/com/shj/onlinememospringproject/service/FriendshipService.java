@@ -1,10 +1,8 @@
 package com.shj.onlinememospringproject.service;
 
-import com.shj.onlinememospringproject.dto.friendship.FriendshipResponseDto;
 import com.shj.onlinememospringproject.dto.friendship.FriendshipSendRequestDto;
 import com.shj.onlinememospringproject.dto.friendship.FriendshipSendResponseDto;
 import com.shj.onlinememospringproject.dto.friendship.FriendshipUpdateRequestDto;
-import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 
 import java.util.List;

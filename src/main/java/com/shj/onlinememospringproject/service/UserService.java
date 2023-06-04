@@ -2,7 +2,6 @@ package com.shj.onlinememospringproject.service;
 
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.user.UserUpdateNameRequestDto;
-import com.shj.onlinememospringproject.dto.user.UserUpdatePwRequestDto;
 
 public interface UserService {
 

@@ -3,7 +3,6 @@ package com.shj.onlinememospringproject.service;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
 import com.shj.onlinememospringproject.domain.user.UserJpaRepository;
 import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemoJpaRepository;
-import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.service.logic.MemoServiceLogic;
 import com.shj.onlinememospringproject.service.logic.UserAndMemoServiceLogic;
 import com.shj.onlinememospringproject.service.logic.UserServiceLogic;

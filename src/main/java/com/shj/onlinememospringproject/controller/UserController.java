@@ -41,7 +41,6 @@ public class UserController {
 
         userService.deleteUser(userId);
         return ResponseData.toResponseEntity(ResponseCode.DELETE_USER);
-        // !!! 나중에 이거 회원 탈퇴 성공시, 로그인 화면으로 리다이렉트 시키도록 변경시킬것. !!!
     }
 
 }

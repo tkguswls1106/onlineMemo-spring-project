@@ -1,7 +1,6 @@
 package com.shj.onlinememospringproject.domain.friendship;
 
 import com.shj.onlinememospringproject.domain.user.User;
-import com.shj.onlinememospringproject.dto.friendship.FriendshipResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

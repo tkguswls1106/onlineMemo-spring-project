@@ -1,7 +1,5 @@
 package com.shj.onlinememospringproject.dto.user;
 
-import com.shj.onlinememospringproject.domain.user.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

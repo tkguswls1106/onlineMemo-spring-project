@@ -1,9 +1,7 @@
 package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.memo.*;
-import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDtos;
-import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
 import com.shj.onlinememospringproject.service.MemoService;
@@ -14,11 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor  // 이걸로 private final 되어있는걸 자동으로 생성자 만들어줘서 @Autowired와 this 없이 의존관계 DI 주입시켜줌.
-//@RequestMapping("")
 public class MemoController {
 
     private final MemoService memoService;
@@ -93,7 +89,6 @@ public class MemoController {
 
         memoService.deleteMemo(userId, memoId);
         return ResponseData.toResponseEntity(ResponseCode.DELETE_MEMO);
-        // !!! 나중에 이거 메모 삭제 성공시, 사용자의 전체 메모리스트가 보이는 메인화면으로 리다이렉트 시키도록 변경시킬것. !!!
     }
 
 }

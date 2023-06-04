@@ -10,7 +10,6 @@ import com.shj.onlinememospringproject.dto.user.UserUpdatePwRequestDto;
 import com.shj.onlinememospringproject.jwt.TokenProvider;
 import com.shj.onlinememospringproject.response.exception.LoginIdDuplicateException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
-import com.shj.onlinememospringproject.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

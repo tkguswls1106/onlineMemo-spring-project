@@ -43,8 +43,6 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         userJpaRepository.findById(userId).orElseThrow(
                 ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
-//        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-//        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<Memo> memos = new ArrayList<>();
@@ -68,8 +66,6 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         memoJpaRepository.findById(memoId).orElseThrow(
                 ()->new NoSuchMemoException());  // 우선 해당 memoId와 일치하는 메모가 존재하는지부터 확인.
 
-//        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-//        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll(sort);
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<User> users = new ArrayList<>();
@@ -125,23 +121,4 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         return memoInviteResponseDto;
     }
 
-
-
-    // 이건 테스트용
-    @Override
-    @Transactional
-    public List<UserAndMemoResponseDto> findAllUserAndMemo(Long userId, Long memoId) {  // 사용자와 메모의 관계 상황을 반환 기능.
-
-        User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
-
-        Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
-
-        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAllByUserAndMemo(userEntity, memoEntity);
-        List<UserAndMemoResponseDto> userAndMemoResponseDtos = userAndMemos.stream().map(UserAndMemoResponseDto::new)
-                .collect(Collectors.toList());
-
-        return userAndMemoResponseDtos;
-    }
 }

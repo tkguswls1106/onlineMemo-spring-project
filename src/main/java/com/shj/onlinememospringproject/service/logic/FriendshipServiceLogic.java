@@ -9,7 +9,6 @@ import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.response.exception.*;
 import com.shj.onlinememospringproject.service.FriendshipService;
-import com.shj.onlinememospringproject.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
