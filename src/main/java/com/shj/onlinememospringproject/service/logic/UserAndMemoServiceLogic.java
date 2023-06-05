@@ -12,7 +12,6 @@ import com.shj.onlinememospringproject.dto.user.UserRequestDto;
 import com.shj.onlinememospringproject.dto.user.UserRequestDtos;
 import com.shj.onlinememospringproject.dto.user.UserResponseDto;
 import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoRequestDto;
-import com.shj.onlinememospringproject.dto.userandmemo.UserAndMemoResponseDto;
 import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.response.exception.NoSuchUserException;
 import com.shj.onlinememospringproject.response.exception.UserAndMemoDuplicateException;
