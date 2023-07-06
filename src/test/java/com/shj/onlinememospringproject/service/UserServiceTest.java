@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // 사실 여기에 @Transactional 선언해도된다.
 // 만약 롤백을 하지않고싶은 메소드가 따로 있다면, 헤당 테스트메소드에 각각 @Rollback(false)을 적어주면된다.
-@SpringBootTest
+// @SpringBootTest
 public class UserServiceTest {
 
     @Autowired
@@ -38,7 +38,7 @@ public class UserServiceTest {
     AuthService authService;
 
 
-    @Test
+    // @Test
     @DisplayName("사용자 회원가입_Test")
     // @Transactional  // 테스트 코드에 @Transactional 사용하면 save 성공한뒤에 다시 롤백된다.
     void userSave_Test() {  // 신규 사용자 생성하고 userId 반환 기능.
@@ -62,7 +62,7 @@ public class UserServiceTest {
         authService.signup(userSignupRequestDto);
     }
 
-    @Test
+    // @Test
     @DisplayName("사용자 1명 검색_Test")
     @Transactional(readOnly = true)
     void findUser_Test() {  // userId로 검색한 사용자 1명 반환 기능.

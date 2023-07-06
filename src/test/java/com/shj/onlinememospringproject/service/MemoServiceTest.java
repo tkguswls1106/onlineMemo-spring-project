@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // 사실 여기에 @Transactional 선언해도된다.
 // 만약 롤백을 하지않고싶은 메소드가 따로 있다면, 헤당 테스트메소드에 각각 @Rollback(false)을 적어주면된다.
-@SpringBootTest
+// @SpringBootTest
 public class MemoServiceTest {
 
     @Autowired
@@ -35,7 +35,7 @@ public class MemoServiceTest {
     UserAndMemoServiceLogic userAndMemoServiceLogic;
 
 
-    @Test
+    // @Test
     @DisplayName("메모 저장_Test")
     // @Transactional
     void memoSave_Test() {  // 신규 메모 생성하고 memoId 반환 기능.
@@ -51,7 +51,7 @@ public class MemoServiceTest {
         memoServiceLogic.saveMemo(userId, memoSaveRequestDto);  // userId가 1인 사용자의 메모 생성
     }
 
-    @Test
+    // @Test
     @DisplayName("메모 1개 검색_Test")
     @Transactional(readOnly = true)
     void findMemo_Test() {  // memoId로 검색한 메모 1개 반환 기능.

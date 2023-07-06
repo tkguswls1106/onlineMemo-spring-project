@@ -6,6 +6,7 @@ import com.shj.onlinememospringproject.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -45,7 +46,8 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/auth", "/signup", "/password", "/information", "/notice").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/", "/login", "/auth", "/signup", "/password", "/information", "/notice", "/testapi").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

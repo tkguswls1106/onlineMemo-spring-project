@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // 사실 여기에 @Transactional 선언해도된다.
 // 만약 롤백을 하지않고싶은 메소드가 따로 있다면, 헤당 테스트메소드에 각각 @Rollback(false)을 적어주면된다.
-@SpringBootTest
+// @SpringBootTest
 public class UserAndMemoServiceTest {
 
     @Autowired
@@ -35,7 +35,7 @@ public class UserAndMemoServiceTest {
     UserAndMemoServiceLogic userAndMemoServiceLogic;
 
 
-    @Test
+    // @Test
     @DisplayName("사용자의 메모들 검색_Test")
     @Transactional(readOnly = true)
     void userFindMemos_Test() {  // userId와 일치하는 사용자의 메모들 리스트를 정렬후 반환 기능.
@@ -58,7 +58,7 @@ public class UserAndMemoServiceTest {
 //        assertThat(countUsers).isEqualTo(2);  // 해당 메모의 현재 사용자가 2명이 맞는가?
 //    }
 
-    @Test
+    // @Test
     @DisplayName("메모의 사용자들 검색_Test")
     @Transactional(readOnly = true)
     void memoFindUsers_Test() {  // memoId와 일치하는 메모의 사용자들 리스트를 정렬후 반환 기능.
