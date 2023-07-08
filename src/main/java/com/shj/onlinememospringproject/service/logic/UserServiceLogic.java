@@ -54,7 +54,7 @@ public class UserServiceLogic implements UserService {
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
         User entity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));
         return new UserResponseDto(entity);
     }
 
@@ -63,7 +63,7 @@ public class UserServiceLogic implements UserService {
     public void updateName(Long userId, UserUpdateNameRequestDto userUpdateNameRequestDto) {  // 해당 userId 사용자의 이름 수정 기능.
 
         User entity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));
 
         entity.updateUsername(userUpdateNameRequestDto.getUsername());
     }
@@ -73,7 +73,7 @@ public class UserServiceLogic implements UserService {
     public void deleteUser(Long userId) {  // 해당 userId의 사용자 삭제 기능. 동시에 해당 사용자의 단독 메모도 함께 삭제함.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));
 
         List<MemoResponseDto> memoResponseDtos = userAndMemoServiceLogic.findMemosByUserId(userEntity.getId());  // 해당 userId의 사용자가 가지고있는 모든 메모들 리스트 가져오기.
         List<Long> memoIds = memoResponseDtos.stream().map(MemoResponseDto::getId)

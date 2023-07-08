@@ -38,7 +38,7 @@ public class MemoServiceLogic implements MemoService {
         // 클라이언트가 요청한, 클라이언트와 교류한 정보니까 RequestDto 형식을 파라미터로 받음.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));  // userId에 해당되는 User 객체 찾아오기
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  //  userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
         User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
@@ -56,7 +56,7 @@ public class MemoServiceLogic implements MemoService {
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
         Memo entity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));
 
         return new MemoResponseDto(entity);
     }
@@ -66,7 +66,7 @@ public class MemoServiceLogic implements MemoService {
     public void updateMemo(Long memoId, MemoUpdateRequestDto memoUpdateRequestDto) {  // 해당 memoId의 메모 수정 기능.
 
         Memo entity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));
 
         entity.updateMemo(memoUpdateRequestDto.getTitle(), memoUpdateRequestDto.getContent());
     }
@@ -76,7 +76,7 @@ public class MemoServiceLogic implements MemoService {
     public void updateIsStar(Long memoId, MemoUpdateStarRequestDto memoUpdateStarRequestDto) {  // 해당 memoId의 즐겨찾기 여부 수정 기능.
 
         memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));
 
         memoJpaRepository.updateStar(memoId, memoUpdateStarRequestDto.getIsStar());
     }
@@ -86,9 +86,9 @@ public class MemoServiceLogic implements MemoService {
     public void deleteMemo(Long userId, Long memoId) {  // 해당 memoId의 메모 삭제 기능. 만약 개인메모가 아닐 경우에는 메모를 삭제하지 않고 메모그룹 탈퇴로 처리함.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));
 
         List<UserResponseDto> userResponseDtos = userAndMemoServiceLogic.findUsersByMemoId(memoEntity.getId());  // 해당 memoId의 메모를 가지고있는 모든 사용자들 리스트 가져오기.
         int memoHasUsersCount = userResponseDtos.size();  // 해당 메모를 가지고 있는 사용자의 수를 카운트.
@@ -136,7 +136,7 @@ public class MemoServiceLogic implements MemoService {
                         .collect(Collectors.toList());
             }
             else {  // 잘못된 정렬 기준을 입력받았을 경우라면
-                throw new MemoSortBadRequestException();  // 잘못된 메모정렬기준 입력 예외처리.
+                throw new MemoSortBadRequestException(order);  // 잘못된 메모정렬기준 입력 예외처리.
             }
         }
         else if (order == null && search != null) {  // 검색

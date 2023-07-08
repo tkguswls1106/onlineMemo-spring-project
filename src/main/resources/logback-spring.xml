@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} / %.-130msg%n---------------------------------------------------------------------------%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log_error.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>log_error_%d{yyyy-MM-dd}_%i.txt</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 30MB -->
+                <maxFileSize>30MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>300MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} / %msg%n---------------------------------------------------------------------------%n%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log_sql.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>log_sql_%d{yyyy-MM-dd}_%i.txt</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 40MB -->
+                <maxFileSize>40MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>400MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} / %.-130msg%n---------------------------------------------------------------------------%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.hibernate.SQL" level="debug">
+        <appender-ref ref="FILE-SQL" />
+    </logger>
+
+    <logger name="org.hibernate.type.descriptor.sql" level="trace">
+        <appender-ref ref="FILE-SQL" />
+    </logger>
+
+    <logger name="com.shj.onlinememospringproject.response" level="error">
+        <appender-ref ref="FILE-ERROR" />
+    </logger>
+
+    <root level="off">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

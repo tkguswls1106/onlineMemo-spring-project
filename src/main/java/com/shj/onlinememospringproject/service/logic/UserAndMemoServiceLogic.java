@@ -40,7 +40,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
         userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
@@ -63,7 +63,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         // 클라이언트에게 전달해야하므로, 이미 DB 레이어를 지나쳤기에 다시 entity 형식을 ResponseDto 형식으로 변환하여 빈환해야함.
 
         memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());  // 우선 해당 memoId와 일치하는 메모가 존재하는지부터 확인.
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));  // 우선 해당 memoId와 일치하는 메모가 존재하는지부터 확인.
 
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
@@ -88,7 +88,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
                 .collect(Collectors.toList());
 
         Memo memoEntity = memoJpaRepository.findById(memoId).orElseThrow(
-                ()->new NoSuchMemoException());  // memoId에 해당되는 Memo 객체 찾아오기
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));  // memoId에 해당되는 Memo 객체 찾아오기
         // 여기서 사실 memo는 어차피 RequestDto로 따로 솎아낼 보안되어야할 컬럼이 없으므로 entity->dto->entity를 거치지않고 바로 사용해도 상관없다.
 
         List<UserAndMemoRequestDto> userAndMemoRequestDtos = new ArrayList<>();
@@ -97,12 +97,12 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
             Long userId = inviteUserIds.get(i);
 
             User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                    ()->new NoSuchUserException());  // userId에 해당되는 User 객체 찾아오기
+                    ()->new NoSuchUserException(String.format("userId = %d", userId)));  // userId에 해당되는 User 객체 찾아오기
             UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // userAndMemoJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
             User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
             if (userAndMemoJpaRepository.existsByUserAndMemo(userEntity, memoEntity)) {  // 이미 DB에 존재하는 사용자와 메모 관계일 경우라면,
-                throw new UserAndMemoDuplicateException();  // 사용자와 메모 관계 중복 예외처리.
+                throw new UserAndMemoDuplicateException(String.format("userId = %d, memoId = %d", userId, memoId));  // 사용자와 메모 관계 중복 예외처리.
             }
 
             userAndMemoRequestDtos.add(new UserAndMemoRequestDto(userSecondEntity, memoEntity));

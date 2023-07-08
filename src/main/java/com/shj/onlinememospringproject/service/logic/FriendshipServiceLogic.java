@@ -31,23 +31,23 @@ public class FriendshipServiceLogic implements FriendshipService {
     public FriendshipSendResponseDto sendFriendship(Long senderUserId, FriendshipSendRequestDto friendshipSendRequestDto) {  // 친구요청 보내기 기능.
 
         User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
-                ()->new NoSuchUserException());  // senderUserId에 해당되는 사용자가 존재하는지 여부 확인. 굳이 리턴받아 값을 할당한 이유는 요청 반대의 경우도 확인해야하기에 적었다.
+                ()->new NoSuchUserException(String.format("userId = %d", senderUserId)));  // senderUserId에 해당되는 사용자가 존재하는지 여부 확인. 굳이 리턴받아 값을 할당한 이유는 요청 반대의 경우도 확인해야하기에 적었다.
         // 이는 save로 저장하지 않고 확인만 할것이기에, 따로 보안되어야할 컬럼을 솎아내는 작업을 하지 않아도 된다.
 
         User userEntity = userJpaRepository.findByLoginId(friendshipSendRequestDto.getLoginId()).orElseThrow(
-                ()->new NoSuchUserException());  // loginId에 해당되는 User 객체 찾아오기 및 사용자가 존재하는지 여부 확인.
+                ()->new NoSuchUserException(String.format("friendship_receiver_loginId = %s", friendshipSendRequestDto.getLoginId())));  // loginId에 해당되는 User 객체 찾아오기 및 사용자가 존재하는지 여부 확인.
         UserRequestDto userRequestDto = new UserRequestDto(userEntity.getId(), userEntity.getLoginId(), userEntity.getUsername());  // friendshipJpaRepository에 save하기전에 먼저, 보안되어야할 컬럼을 솎아내서 한정적으로 가져오기위헤 dto를 한번 거침.
         User userSecondEntity = userRequestDto.toEntity();  // 보안되어야할 컬럼을 솎아낸 dto를 다시 entity 형식으로 변환.
 
         if (senderUserId == userEntity.getId()) {  // 자신이 자신에게 친구요청을 신청하려고 한다면,
-            throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
+            throw new FriendshipBadRequestException("because I send a freindship myself");  // 잘못된 친구관계 요청 에러 예외처리.
         }
 
         if (friendshipJpaRepository.existsByUserAndSenderUserId(userEntity, senderUserId)) {  // 이미 DB에 존재하는 친구요청일 경우라면,
-            throw new FriendshipDuplicateException();  // 친구요청 관계 중복 예외처리.
+            throw new FriendshipDuplicateException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", userEntity.getId(), senderUserId));  // 친구요청 관계 중복 예외처리.
         }
         else if (friendshipJpaRepository.existsByUserAndSenderUserId(senderUserEntity, userEntity.getId())) {  // 또는 반대로 이미 친구요청을 받은상태인데 친구요청한 경우라면,
-            throw new FriendshipDuplicateException();  // 친구요청 관계 중복 예외처리.
+            throw new FriendshipDuplicateException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", senderUserEntity.getId(), userEntity.getId()));  // 친구요청 관계 중복 예외처리.
         }
 
         FriendshipRequestDto friendshipRequestDto = new FriendshipRequestDto(userSecondEntity, senderUserId);
@@ -61,7 +61,7 @@ public class FriendshipServiceLogic implements FriendshipService {
     public List<UserResponseDto> findSendersByUserId(Long userId) {  // 해당 userId 사용자의 친구요청 응답대기중인 요청발신자 사용자들 리스트 반환 기능.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
         List<Friendship> friendships = friendshipJpaRepository.findAllByUser(userEntity);
         List<FriendshipResponseDto> friendshipResponseDtos = friendships.stream().map(FriendshipResponseDto::new)
@@ -73,7 +73,7 @@ public class FriendshipServiceLogic implements FriendshipService {
                 Long senderUserId = friendshipResponseDtos.get(i).getSenderUserId();
                 users.add(
                         userJpaRepository.findById(senderUserId).orElseThrow(
-                                () -> new NoSuchUserException())
+                                () -> new NoSuchUserException(String.format("friendship_wait_userId = %d", senderUserId)))
                 );
             }
         }
@@ -89,7 +89,7 @@ public class FriendshipServiceLogic implements FriendshipService {
     public List<UserResponseDto> findFriendsByUserId(Long userId) {  // 해당 userId 사용자의 친구들 리스트 반환 기능.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
 
         List<Friendship> friendships = friendshipJpaRepository.findAllByUser(userEntity);
         List<FriendshipResponseDto> friendshipResponseDtos = friendships.stream().map(FriendshipResponseDto::new)
@@ -101,7 +101,7 @@ public class FriendshipServiceLogic implements FriendshipService {
                 Long senderUserId = friendshipResponseDtos.get(i).getSenderUserId();
                 users.add(
                         userJpaRepository.findById(senderUserId).orElseThrow(
-                                () -> new NoSuchUserException())
+                                () -> new NoSuchUserException(String.format("friendship_friend_userId = %d", senderUserId)))
                 );
             }
         }
@@ -117,12 +117,12 @@ public class FriendshipServiceLogic implements FriendshipService {
     public void updateFriendship(Long userId, Long senderUserId, FriendshipUpdateRequestDto friendshipUpdateRequestDto) {  // 친구요청 수신자는 userId, 발신자는 senderUserId에 해당되는 요청 친구에 대한 친구 맺기 여부 수정 기능.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("updateFriendship_userId = %d", userId)));  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
         User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 senderUserId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("updateFriendship_userId = %d", senderUserId)));  // 우선 senderUserId와 일치하는 사용자가 존재하는지부터 확인.
 
         Friendship friendshipEntity = friendshipJpaRepository.findByUserAndSenderUserId(userEntity, senderUserId).orElseThrow(
-                ()->new NoSuchFriendshipException());  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지 확인.
+                ()->new NoSuchFriendshipException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", userEntity.getId(), senderUserId)));  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지 확인.
 
         if (friendshipUpdateRequestDto.getIsFriend() == 1 && friendshipUpdateRequestDto.getIsWait() == 0) {  // 친구요청 수락일 경우
             friendshipJpaRepository.updateFriendship(friendshipEntity.getId(), friendshipUpdateRequestDto.getIsFriend(), friendshipUpdateRequestDto.getIsWait());  // 과정 1. 친구관계 상태를 친구로 업데이트하고 그 후
@@ -134,7 +134,7 @@ public class FriendshipServiceLogic implements FriendshipService {
             friendshipJpaRepository.save(friendshipReverseRequestDto.toEntity());  // 과정 2. 반대의 경우도 친구관계 상태를 친구요청 상태로 새로 신규 생성해주고 그 후
 
             Friendship friendshipReverseEntity = friendshipJpaRepository.findByUserAndSenderUserId(senderUserSecondEntity, userEntity.getId()).orElseThrow(
-                    ()->new NoSuchFriendshipException());  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지, 방금 저장했지만 다시 한번 확인.
+                    ()->new NoSuchFriendshipException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", senderUserSecondEntity.getId(), userEntity.getId())));  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지, 방금 저장했지만 다시 한번 확인.
             friendshipJpaRepository.updateFriendship(friendshipReverseEntity.getId(), friendshipUpdateRequestDto.getIsFriend(), friendshipUpdateRequestDto.getIsWait());  // 과정 3. 반대의 경우도 친구관계 상태를 친구로 바로 업데이트 해준다.
             // 쿼리메소드 사용하여 JPA 영속성 주기없이 바로 DB에 반영하고 flush & clear.
         }
@@ -142,10 +142,10 @@ public class FriendshipServiceLogic implements FriendshipService {
             friendshipJpaRepository.deleteById(friendshipEntity.getId());  // 친구요청 관계 자체를 삭제시킴. 이는 요청만 온 상태에서 삭제이므로, 반대의 경우는 삭제하지 않아도 된다.
         }
         else if (friendshipUpdateRequestDto.getIsFriend() == 1 && friendshipUpdateRequestDto.getIsWait() == 1) {  // 잘못된 친구관계 수정 요청일 경우
-            throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
+            throw new FriendshipBadRequestException("because this is a wrong friendship_request");  // 잘못된 친구관계 요청 에러 예외처리.
         }
         else if (friendshipUpdateRequestDto.getIsFriend() == 0 && friendshipUpdateRequestDto.getIsWait() == 1) {  // 잘못된 친구관계 수정 요청일 경우
-            throw new FriendshipBadRequestException();  // 잘못된 친구관계 요청 에러 예외처리.
+            throw new FriendshipBadRequestException("because this is a wrong friendship_request");  // 잘못된 친구관계 요청 에러 예외처리.
         }
     }
 
@@ -154,14 +154,14 @@ public class FriendshipServiceLogic implements FriendshipService {
     public void deleteFriendship(Long userId, Long senderUserId) {  // 해당 userId 사용자의 친구들중에서 해당 senderUserId의 사용자를 친구 목록에서 삭제 기능.
 
         User userEntity = userJpaRepository.findById(userId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("userId = %d", userId)));  // 우선 userId와 일치하는 사용자가 존재하는지부터 확인.
         User senderUserEntity = userJpaRepository.findById(senderUserId).orElseThrow(
-                ()->new NoSuchUserException());  // 우선 senderUserId와 일치하는 사용자가 존재하는지부터 확인.
+                ()->new NoSuchUserException(String.format("deleteFriendship_friend_userId = %d", senderUserId)));  // 우선 senderUserId와 일치하는 사용자가 존재하는지부터 확인.
 
         Friendship friendshipEntity = friendshipJpaRepository.findByUserAndSenderUserId(userEntity, senderUserId).orElseThrow(
-                ()->new NoSuchFriendshipException());  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지 확인.
+                ()->new NoSuchFriendshipException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", userEntity.getId(), senderUserId)));  // 이에 해당되는 사용자와 senderUserId를 가진 튜플 데이터가 존재하는지 확인.
         Friendship friendshipReverseEntity = friendshipJpaRepository.findByUserAndSenderUserId(senderUserEntity, userId).orElseThrow(
-                ()->new NoSuchFriendshipException());  // 위와 반대의 경우도 친구관계 튜플 데이터가 존재하는지 확인.
+                ()->new NoSuchFriendshipException(String.format("friendship_receiver_userId = %d, friendship_sender_userId = %d", senderUserEntity.getId(), userId)));  // 위와 반대의 경우도 친구관계 튜플 데이터가 존재하는지 확인.
 
         friendshipJpaRepository.deleteById(friendshipEntity.getId());
         friendshipJpaRepository.deleteById(friendshipReverseEntity.getId());

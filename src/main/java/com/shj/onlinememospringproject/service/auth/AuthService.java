@@ -35,7 +35,7 @@ public class AuthService {
         String newLoginId = userSignupRequestDto.getLoginId();
         userJpaRepository.findByLoginId(newLoginId)
                 .ifPresent(user -> {  // 해당 로그인아이디의 사용자가 이미 존재한다면,
-                    throw new LoginIdDuplicateException();  // 회원가입 로그인아이디 중복 예외처리.
+                    throw new LoginIdDuplicateException(newLoginId);  // 회원가입 로그인아이디 중복 예외처리.
                 });
 
         User entity = userJpaRepository.save(userSignupRequestDto.toEntity(passwordEncoder));
@@ -62,7 +62,7 @@ public class AuthService {
         // 여기서 로그인이 가능한지 실제로 검증이 이루어진다.
 
         User entity = userJpaRepository.findByLoginId(userUpdatePwRequestDto.getLoginId()).orElseThrow(
-                ()->new NoSuchUserException());
+                ()->new NoSuchUserException(String.format("loginId = %s", userUpdatePwRequestDto.getLoginId())));
 
         entity.updateFirstPw(passwordEncoder.encode(userUpdatePwRequestDto.getNewFirstPw()));
     }

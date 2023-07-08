@@ -1,14 +1,21 @@
 package com.shj.onlinememospringproject.response.exception;
 
-import com.shj.onlinememospringproject.response.ResponseCode;
+import com.shj.onlinememospringproject.response.responseitem.MessageItem;
+import com.shj.onlinememospringproject.response.responseitem.StatusItem;
 import lombok.Getter;
 
 @Getter
 public class NoSuchMemoException extends RuntimeException  {
 
-    private ResponseCode responseCode;
+    private Integer errorStatus;
+    private String errorMessage;
 
-    public NoSuchMemoException() {
-        this.responseCode = ResponseCode.NOT_FOUND_MEMO;
+    private String message;
+
+    public NoSuchMemoException(String message) {
+        this.errorStatus = StatusItem.NOT_FOUND;
+        this.errorMessage = MessageItem.NOT_FOUND_MEMO;
+
+        this.message = message;
     }
 }

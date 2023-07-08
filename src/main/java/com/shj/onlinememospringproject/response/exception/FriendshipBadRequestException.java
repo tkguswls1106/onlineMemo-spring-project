@@ -1,14 +1,21 @@
 package com.shj.onlinememospringproject.response.exception;
 
-import com.shj.onlinememospringproject.response.ResponseCode;
+import com.shj.onlinememospringproject.response.responseitem.MessageItem;
+import com.shj.onlinememospringproject.response.responseitem.StatusItem;
 import lombok.Getter;
 
 @Getter
 public class FriendshipBadRequestException extends RuntimeException {
 
-    private ResponseCode responseCode;
+    private Integer errorStatus;
+    private String errorMessage;
 
-    public FriendshipBadRequestException() {
-        this.responseCode = ResponseCode.BAD_REQUEST_FRIENDSHIP;
+    private String message;
+
+    public FriendshipBadRequestException(String message) {
+        this.errorStatus = StatusItem.BAD_REQUEST;
+        this.errorMessage = MessageItem.BAD_REQUEST_FRIENDSHIP;
+
+        this.message = message;
     }
 }
