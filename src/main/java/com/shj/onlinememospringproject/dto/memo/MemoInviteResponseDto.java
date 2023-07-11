@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @Getter
 @NoArgsConstructor
@@ -33,7 +34,7 @@ public class MemoInviteResponseDto {  // 요청받아 가져오는 DTO. 예를�
 
     @JsonIgnore
     public LocalDateTime getDateTimeModifiedDate() {  // 날짜 정렬에 사용할 string형식의 날짜를 localDateTime형식으로 변환하는 메소드이다.
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d. a h:mm").withLocale(Locale.forLanguageTag("ko"));
         LocalDateTime dateTimeModifiedDate = LocalDateTime.parse(this.modifiedDate, formatter);
         return dateTimeModifiedDate;
     }

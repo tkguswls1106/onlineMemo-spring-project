@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity handleForbiddenException(Exception ex) {
-        log.error(StatusItem.FORBIDDEN + " " + MessageItem.FORBIDDEN + "\n" + "==> error_messege / " + ex.getMessage() + "\n" + "==> error_cause / " + ex.getCause());
+        log.error(StatusItem.FORBIDDEN + " " + MessageItem.FORBIDDEN  + "\n" + "==> error_messege / " + ex.getMessage() + "\n" + "==> error_cause / " + ex.getCause());
         return ResponseData.toResponseEntity(ResponseCode.FORBIDDEN_ERROR);
         // 사실 이건 의미가 없는게, 예외처리권한이 JwtAccessDeniedHandler 에게 넘어가기에 크롬콘솔에선 설정한방식대로 출력되지않는다.
         // 하지만 이는 postman 프로그램 에서 출력받아 확인할 수 있다.
