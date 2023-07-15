@@ -3,17 +3,17 @@
 
     <property name="LOGS_PATH" value="./logs"/>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} / %.-130msg%n---------------------------------------------------------------------------%n</pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} / %.-160msg%n-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS_PATH}/log_error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOGS_PATH}/store_error/log_error_%d{yyyy-MM-dd, ${logback.timezone:-Asia/Seoul}}_%i.txt</fileNamePattern>
+            <fileNamePattern>${LOGS_PATH}/store_error/log_error_%d{yyyy-MM-dd, ${logback.timezone:-Asia/Seoul}}_%i.gz</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 30MB -->
                 <maxFileSize>30MB</maxFileSize>
@@ -26,37 +26,37 @@
         </encoder>
     </appender>
 
-<!--    <appender name="FILE-SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-<!--        <file>${LOGS_PATH}/log_sql.txt</file>-->
-<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-<!--            &lt;!&ndash; rollover daily &ndash;&gt;-->
-<!--            <fileNamePattern>${LOGS_PATH}/store_sql/log_sql_%d{yyyy-MM-dd, ${logback.timezone:-Asia/Seoul}}_%i.txt</fileNamePattern>-->
-<!--            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
-<!--                &lt;!&ndash; or whenever the file size reaches 40MB &ndash;&gt;-->
-<!--                <maxFileSize>40MB</maxFileSize>-->
-<!--            </timeBasedFileNamingAndTriggeringPolicy>-->
-<!--            <maxHistory>7</maxHistory>-->
-<!--            <totalSizeCap>400MB</totalSizeCap>-->
-<!--        </rollingPolicy>-->
-<!--        <encoder>-->
-<!--            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} / %.-130msg%n-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;%n</pattern>-->
-<!--        </encoder>-->
-<!--    </appender>-->
+    <appender name="FILE-SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_PATH}/log_sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOGS_PATH}/store_sql/log_sql_%d{yyyy-MM-dd, ${logback.timezone:-Asia/Seoul}}_%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 30MB -->
+                <maxFileSize>30MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>300MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} / %.-160msg%n---------------------------------------------------------------------------%n</pattern>
+        </encoder>
+    </appender>
 
-<!--    <logger name="org.hibernate.SQL" level="debug">-->
-<!--        <appender-ref ref="FILE-SQL" />-->
-<!--    </logger>-->
+    <logger name="org.hibernate.SQL" level="debug">
+        <appender-ref ref="FILE-SQL" />
+    </logger>
 
-<!--    <logger name="org.hibernate.type.descriptor.sql" level="trace">-->
-<!--        <appender-ref ref="FILE-SQL" />-->
-<!--    </logger>-->
+    <logger name="org.hibernate.type.descriptor.sql" level="trace">
+        <appender-ref ref="FILE-SQL" />
+    </logger>
 
     <logger name="com.shj.onlinememospringproject.response" level="error">
         <appender-ref ref="FILE-ERROR" />
     </logger>
 
     <root level="off">
-        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="CONSOLE"/>-->
     </root>
 
 </configuration>

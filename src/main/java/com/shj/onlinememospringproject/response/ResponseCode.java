@@ -61,6 +61,7 @@ public enum ResponseCode {
     READ_IS_LOGIN(StatusItem.OK, MessageItem.READ_IS_LOGIN),
     LOGIN_SUCCESS(StatusItem.OK, MessageItem.LOGIN_SUCCESS),
     UPDATE_PASSWORD(StatusItem.NO_CONTENT, MessageItem.UPDATE_PASSWORD),
+    HEALTHY_SUCCESS(StatusItem.OK, MessageItem.HEALTHY_SUCCESS),
 
     // 기타 실패 응답
     INTERNAL_SERVER_ERROR(StatusItem.INTERNAL_SERVER_ERROR, MessageItem.INTERNAL_SERVER_ERROR),

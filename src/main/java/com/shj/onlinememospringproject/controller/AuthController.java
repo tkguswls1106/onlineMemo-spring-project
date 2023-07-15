@@ -2,7 +2,6 @@ package com.shj.onlinememospringproject.controller;
 
 import com.shj.onlinememospringproject.dto.token.TokenDto;
 import com.shj.onlinememospringproject.dto.user.*;
-import com.shj.onlinememospringproject.service.UserService;
 import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.response.ResponseCode;
 import com.shj.onlinememospringproject.response.ResponseData;
@@ -18,18 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;  // testapi를 위해서 적어주었음.
 
-
-    @GetMapping("/testapi")
-    public ResponseEntity testapi() {  // 테스트용 api
-        // 단, 이는 api테스트를 위한 userId가 1인 테스트용 계정을 생성해두고 탈퇴하지않아야 유의미하게 사용가능하다.
-
-        Long userId = Long.valueOf(1);
-        UserResponseDto userResponseDto = userService.findById(userId);
-
-        return ResponseData.toResponseEntity(ResponseCode.READ_USER, userResponseDto);
-    }
 
     @GetMapping("/auth")
     public ResponseEntity isLogin() {  // 로그인 상태 여부 확인
