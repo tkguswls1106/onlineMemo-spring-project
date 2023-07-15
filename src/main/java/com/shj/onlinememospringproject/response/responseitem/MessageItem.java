@@ -34,6 +34,8 @@ public class MessageItem {
     public static final String BAD_REQUEST_FRIENDSHIP = "ERROR - 잘못된 친구요청 에러";
 
     public static final String READ_IS_LOGIN = "SUCCESS - 현재 로그인 여부 조회 성공";
+    public static final String anonymousUser_ERROR = "ERROR - anonymousUser 에러";
+
     public static final String INTERNAL_SERVER_ERROR = "ERROR - 서버 내부 에러";
 
     public static final String HEALTHY_SUCCESS = "SUCCESS - Health check 성공";
