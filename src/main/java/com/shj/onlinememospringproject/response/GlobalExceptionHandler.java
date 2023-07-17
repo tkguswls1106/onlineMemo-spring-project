@@ -25,7 +25,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity handleUnauthorizedException(Exception ex) {
-        log.error(StatusItem.UNAUTHORIZED + " " + MessageItem.UNAUTHORIZED + "\n" + "==> error_messege / " + ex.getMessage());
+        // log.error(StatusItem.UNAUTHORIZED + " " + MessageItem.UNAUTHORIZED + "\n" + "==> error_messege / " + ex.getMessage());
+        // 401 에러는 딱히 로그의 특징성에서 의미가 없어서, 로그의 가독성을 위해 logback 출력에서 제외시키도록 하겠다.
         return ResponseData.toResponseEntity(ResponseCode.UNAUTHORIZED_ERROR);
         // 사실 이건 의미가 없는게, 예외처리권한이 JwtAuthenticationEntryPoint 에게 넘어가기에 크롬콘솔에선 설정한방식대로 출력되지않는다.
         // 하지만 이는 postman 프로그램 에서 출력받아 확인할 수 있다.
