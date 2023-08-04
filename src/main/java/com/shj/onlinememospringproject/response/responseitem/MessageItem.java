@@ -39,4 +39,6 @@ public class MessageItem {
     public static final String INTERNAL_SERVER_ERROR = "ERROR - 서버 내부 에러";
 
     public static final String HEALTHY_SUCCESS = "SUCCESS - Health check 성공";
+
+    public static final String GET_LOGIN = "204 - login api를 get method로 호출하였음";
 }

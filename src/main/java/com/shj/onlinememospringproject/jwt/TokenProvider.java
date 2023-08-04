@@ -49,7 +49,9 @@ public class TokenProvider {
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 
-        System.out.println(tokenExpiresIn);
+//        System.out.println(tokenExpiresIn);
+//        // 이것은 원래 'Fri Jul 21 23:25:11 KST 2023'처럼 '로그인한시각+만료시간6시간 = 로그인토큰만료시간'을 콘솔에 출력해주는 코드이다.
+//        // 참고로, 'Fri Jul 21 23:25:11 KST 2023'의 의미는 '요일 월 일 시:분:초 기준시각나라 년도' 이다.
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())

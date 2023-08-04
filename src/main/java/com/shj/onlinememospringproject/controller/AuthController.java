@@ -38,6 +38,10 @@ public class AuthController {
         TokenDto tokenDto = authService.login(userLoginRequestDto);
         return ResponseData.toResponseEntity(ResponseCode.LOGIN_SUCCESS, tokenDto);
     }
+    @GetMapping("/login")
+    public ResponseEntity getLogin() {  // 로그인 api가 get방식으로 요청올시에
+        return ResponseData.toResponseEntity(ResponseCode.GET_LOGIN);
+    }
 
     @PutMapping("/password")
     public ResponseEntity updatePassword(@RequestBody UserUpdatePwRequestDto userUpdatePwRequestDto) {  // 비밀번호 수정

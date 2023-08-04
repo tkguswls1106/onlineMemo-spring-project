@@ -60,6 +60,7 @@ public enum ResponseCode {
     // 기타 성공 응답
     READ_IS_LOGIN(StatusItem.OK, MessageItem.READ_IS_LOGIN),
     LOGIN_SUCCESS(StatusItem.OK, MessageItem.LOGIN_SUCCESS),
+    GET_LOGIN(StatusItem.NO_CONTENT, MessageItem.GET_LOGIN),
     UPDATE_PASSWORD(StatusItem.NO_CONTENT, MessageItem.UPDATE_PASSWORD),
     HEALTHY_SUCCESS(StatusItem.OK, MessageItem.HEALTHY_SUCCESS),
 
