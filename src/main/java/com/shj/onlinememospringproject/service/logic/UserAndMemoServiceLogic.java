@@ -45,7 +45,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<Memo> memos = new ArrayList<>();
-        for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 userId와 일치하는 user객체가 존재한다면 그 memo객체를 memos리스트에 넣어줌.
+        for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 userId와 일치하는 user객체가 존재한다면, 그 리스트 인덱스의 memo객체를 memos리스트에 넣어줌.
             if (userAndMemos.get(i).getUser().getId() == userId) {
                 memos.add(userAndMemos.get(i).getMemo());
             }
@@ -68,7 +68,7 @@ public class UserAndMemoServiceLogic implements UserAndMemoService {
         List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
 
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 userId와 일치하는 user객체가 존재한다면 그 memo객체를 memos리스트에 넣어줌.
+        for (int i = 0; i < userAndMemos.size(); i++) {  // userAndMemos리스트에서 memoId와 일치하는 memo객체가 존재한다면, 그 리스트 인덱스의 user객체를 users리스트에 넣어줌.
             if (userAndMemos.get(i).getMemo().getId() == memoId) {
                 users.add(userAndMemos.get(i).getUser());
             }

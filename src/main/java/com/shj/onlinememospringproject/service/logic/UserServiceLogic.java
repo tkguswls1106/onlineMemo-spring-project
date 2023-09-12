@@ -1,5 +1,7 @@
 package com.shj.onlinememospringproject.service.logic;
 
+import com.shj.onlinememospringproject.domain.userandmemo.UserAndMemo;
+import com.shj.onlinememospringproject.response.exception.NoSuchMemoException;
 import com.shj.onlinememospringproject.util.SecurityUtil;
 import com.shj.onlinememospringproject.domain.friendship.FriendshipJpaRepository;
 import com.shj.onlinememospringproject.domain.memo.MemoJpaRepository;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +47,30 @@ public class UserServiceLogic implements UserService {
 
         if (securityUser.getId() != userId) {
             throw new RuntimeException("SecurityContext의 사용자id와 path의 사용자id 불일치 에러");
+        }
+    }
+
+    public void checkTokenMemo(Long memoId) {  // 헤더에 있는 token값을 토대로 Security Context 내의 User의 userId와 Memo의 userId가 일치하는지 확인하는 메소드이다.
+        UserResponseDto securityUser = userJpaRepository.findById(SecurityUtil.getCurrentMemberId())
+                .map(UserResponseDto::new)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+
+        memoJpaRepository.findById(memoId).orElseThrow(
+                ()->new NoSuchMemoException(String.format("memoId = %d", memoId)));
+
+        List<UserAndMemo> userAndMemos = userAndMemoJpaRepository.findAll();
+        List<Long> userIds = new ArrayList<>();
+        for (int i = 0; i < userAndMemos.size(); i++) {
+            // userAndMemos리스트에서 memoId와 일치하는 memo객체가 존재한다면, 그 리스트 인덱스의 user객체의 userId가 Security Context 내의 User의 userId와 일치하는지 확인하고, 해당 userId를 userIds리스트에 넣어줌.
+            if (userAndMemos.get(i).getMemo().getId() == memoId) {
+                if (userAndMemos.get(i).getUser().getId() == securityUser.getId()) {
+                    userIds.add(userAndMemos.get(i).getUser().getId());
+                }
+            }
+        }
+
+        if (userIds.size() <= 0) {
+            throw new RuntimeException("SecurityContext의 사용자id와 메모의 사용자id 불일치 에러");
         }
     }
 
